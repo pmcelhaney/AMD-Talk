@@ -4,47 +4,292 @@
 <!--[if IE 8]>    <html class="no-js ie8" lang="en"> <![endif]-->
 <!--[if gt IE 8]><!-->  <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	
-	<title>Getting Started with deck.js</title>
-	
-	<meta name="description" content="A jQuery library for modern HTML presentations">
-	<meta name="author" content="Caleb Troughton">
-	<meta name="viewport" content="width=1024, user-scalable=no">
-	
-	<!-- Core and extension CSS files -->
-	<link rel="stylesheet" href="deckjs/core/deck.core.css">
-	<link rel="stylesheet" href="deckjs/extensions/goto/deck.goto.css">
-	<link rel="stylesheet" href="deckjs/extensions/menu/deck.menu.css">
-	<link rel="stylesheet" href="deckjs/extensions/navigation/deck.navigation.css">
-	<link rel="stylesheet" href="deckjs/extensions/status/deck.status.css">
-	<link rel="stylesheet" href="deckjs/extensions/hash/deck.hash.css">
-	
-	<!-- Theme CSS files (menu swaps these out) -->
-	<link rel="stylesheet" id="style-theme-link" href="deckjs/themes/style/web-2.0.css">
-	<link rel="stylesheet" id="transition-theme-link" href="deckjs/themes/transition/horizontal-slide.css">
-	
-	<!-- Custom CSS just for this page -->
-	<link rel="stylesheet" href="deckjs/introduction/introduction.css">
-	
-	<script src="deckjs/modernizr.custom.js"></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Asynchronous Module Definitions</title>
+    
+    <meta name="viewport" content="width=1024, user-scalable=no">
+    
+    <!-- Core and extension CSS files -->
+    <link rel="stylesheet" href="deckjs/core/deck.core.css">
+    <link rel="stylesheet" href="deckjs/extensions/goto/deck.goto.css">
+    <link rel="stylesheet" href="deckjs/extensions/menu/deck.menu.css">
+    <link rel="stylesheet" href="deckjs/extensions/navigation/deck.navigation.css">
+    <link rel="stylesheet" href="deckjs/extensions/status/deck.status.css">
+    <link rel="stylesheet" href="deckjs/extensions/hash/deck.hash.css">
+    
+    
+    <!-- Theme CSS files (menu swaps these out) -->
+    <link rel="stylesheet" id="style-theme-link" href="deckjs/themes/style/web-2.0.css">
+    <link rel="stylesheet" id="transition-theme-link" href="deckjs/themes/transition/horizontal-slide.css">
+    
+    <!-- Custom CSS just for this page -->
+    <link rel="stylesheet" href="deckjs/introduction/introduction.css">
+    
+    <script src="deckjs/modernizr.custom.js"></script>
 
-	
+    
 </head>
 
 <body class="deck-container">
 
 
 <section class="slide" id="title-slide">
-	<h1>Asynchronous Module Definition (AMD)</h1>
+    <h1>Asynchronous Module Definition (AMD)</h1>
 </section>
 
-<section class="slide" id="second-slide">
-	<h2>This is the second slide</h2>
-	<p class="slide">
-		And here's some text.
-	</p>	
+
+
+<section class="slide" id="1999">
+    <h2>It's 1999...</h2>
+    <ul>
+        <li class="slide">Y2K</li>
+        <li class="slide">Prince</li>
+        <li class="slide">Sloppy JavaScript</li>
+    </ul>   
+</section>
+
+<section class="slide" id="1999">
+    <h2>Sloppy JavaScript</h2>
+    <ul>
+        <li class="slide">Polluting the global namespace. (picture of pollution / factory - "the dark side of the factory pattern")</li>
+        <li class="slide">Downloading too many scripts. (screenshot of yslow or <a href="http://www.flickr.com/photos/garryknight/2744629787/">man carrying books</a>)</li>
+        <li class="slide">Dependencies must load in the right order. (<a href="http://www.flickr.com/photos/tychay/2289129967/">YUI dependency tree</a>)</li>
+    </ul>   
+</section>
+
+<section class="slide" id="global-pollution">
+    <h2>Polluting the global namespace</h2>
+    
+    <h3>scale.js</h3>
+    <pre>
+        var settings = { 
+            min: 100,
+            max: 500,
+            unit: 'lb'
+        };
+        ...
+    </pre>  
+    
+    <h3>ruler.js</h3>
+    <pre>
+        var settings = {
+            length: 36,
+            offset: 50,
+            unit: 'in'
+        }
+        ...
+    </pre>  
+
+</section>
+
+<section class="slide" id="global-pollution-2">
+    <h2>Polluting the global namespace (2)</h2>
+    
+    <h3>scale.js</h3>
+    <pre>
+        window.Scale = {
+            settings: { 
+                min: 100,
+                max: 500,
+                unit: 'lb'
+            },
+            ...
+        }
+    </pre>  
+    
+    <h3>ruler.js</h3>
+    <pre>
+        window.Ruler = {
+            settings:  {
+                length: 36,
+                offset: 50,
+                unit: 'in'
+            },
+            ...
+        }
+    </pre>  
+
+</section>
+
+
+
+<section class="slide" id="iife">
+    <h2>IIFE</h2>
+    
+    <h3>Immediately Invoked Function Expression</h3>
+    
+    <pre>
+        
+<strong>(function () {</strong>
+    var settings = {  
+        min: 100,
+        max: 500,
+        unit: 'lb'
+    };
+    
+    ...
+    
+    window.Ruler = { ... };
+
+<strong>})();</strong>
+        
+        
+    </pre>  
+
+    
+
+</section>
+
+
+<section class="slide" id="iife-arguments">
+    <h2>IIFE</h2>
+    
+    <h3>Immediately Invoked Function Expression</h3>
+    
+    <pre>
+        
+(function (<strong>$, _, unitConverter</strong>) {
+
+    ...
+    
+    window.Ruler = { ... };
+
+})(<strong>window.jQuery, window._, window.UNITS</strong>);
+        
+        
+    </pre>  
+
+    
+
+</section>
+
+
+
+<section class="slide" id="iife-lazyload">
+    <h2>IIFE</h2>
+    
+    <h3>Immediately Invoked Function Expression</h3>
+    
+    <pre>
+        
+(function ($, _, unitConverter) {
+    
+    
+    ...
+    
+    window.Ruler = { ... };
+
+})(<strong>load('lib/jquery.js'), load('lib/underscore.js'), load('units.js')</strong>);
+        
+        
+    </pre>  
+
+    
+
+</section>
+
+
+<section class="slide" id="iife-refactored">
+    <h2>Fun with Functions</h2>
+    
+    <h3>Turn the IIFE Into a Callback</h3>    
+    <pre>
+
+loadScripts_then_callFunction(
+    ['jquery.js', 'underscore.js', 'units.js'], 
+    function ($, _, unitConverter) {
+
+    
+    ...
+    
+    window.Ruler = { ... };
+    
+})        
+        
+    </pre>  
+
+    <p>* foo.js must set window['foo']</p>
+
+</section>
+
+
+
+
+
+<section class="slide" id="drop-the-dotjs">
+    <h2>Fun with Functions</h2>
+    
+    <h3>Drop the .js</h3>
+    
+    <pre>
+
+loadScripts_then_callFunction(
+    ['jquery', 'underscore', 'units'], 
+    function ($, _, unitConverter) {
+
+    
+    ...
+    
+    window.Ruler = { ... };
+    
+})        
+        
+    </pre>  
+
+<p>* foo.js must set window['foo']</p>
+
+</section>
+
+<section class="slide" id="window-to-return">
+    <h2>Fun with Functions</h2>
+    
+    <h3>Decouple the file name</h3>
+    
+    <pre>
+
+loadScripts_then_callFunction(
+    ['jquery', 'underscore', 'units'], 
+    function ($, _, unitConverter) {
+
+    
+    ...
+    
+    return { ... };
+    
+})        
+        
+    </pre>  
+
+<p><del>* foo.js must set window['foo']</del> <ins>(return value is stored in window['foo'] automatically)</ins></p>
+
+</section>
+
+
+
+
+<section class="slide" id="window-to-return">
+    <h2>O Hai, AMD</h2>
+    
+    
+    <pre>
+
+define(
+    ['jquery', 'underscore', 'units'], 
+    function ($, _, unitConverter) {
+
+    
+    ...
+    
+    return { ... };
+    
+})        
+        
+    </pre>  
+
+<p><del>* foo.js must set window['foo']</del> <ins>(return value is stored <del>in window['foo']</del> a closure automatically)</ins></p>
+
 </section>
 
 
@@ -52,15 +297,15 @@
 <a href="#" class="deck-next-link" title="Next">&#8594;</a>
 
 <p class="deck-status">
-	<span class="deck-status-current"></span>
-	/
-	<span class="deck-status-total"></span>
+    <span class="deck-status-current"></span>
+    /
+    <span class="deck-status-total"></span>
 </p>
 
 <form action="." method="get" class="goto-form">
-	<label for="goto-slide">Go to slide:</label>
-	<input type="number" name="slidenum" id="goto-slide">
-	<input type="submit" value="Go">
+    <label for="goto-slide">Go to slide:</label>
+    <input type="number" name="slidenum" id="goto-slide">
+    <input type="submit" value="Go">
 </form>
 
 <a href="." title="Permalink to this slide" class="deck-permalink">#</a>
@@ -80,9 +325,9 @@
 
 <!-- Specific to this page -->
 <script type="text/javascript" charset="utf-8">
-	$(function () {
-		$.deck('.slide');
-	});
+    $(function () {
+        $.deck('.slide');
+    });
 </script>
 
 
