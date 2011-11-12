@@ -22,7 +22,7 @@
     
     <!-- Theme CSS files (menu swaps these out) -->
     <link rel="stylesheet" id="style-theme-link" href="deckjs/themes/style/web-2.0.css">
-    <link rel="stylesheet" id="transition-theme-link" href="deckjs/themes/transition/horizontal-slide.css">
+    <link rel="stylesheet" id="transition-theme-link" href="deckjs/themes/transition/fade.css">
     
     <!-- Custom CSS just for this page -->
     <link rel="stylesheet" href="deckjs/introduction/introduction.css">
@@ -143,6 +143,30 @@
 </section>
 
 
+<section class="slide" id="iife-stripped">
+    <h2>IIFE</h2>
+    
+    <h3>Immediately Invoked Function Expression</h3>
+    
+    <pre>
+        
+<strong>(function () {</strong>
+
+    ...
+    
+    window.Ruler = { ... };
+
+<strong>})();</strong>
+        
+        
+    </pre>  
+
+    
+
+</section>
+
+
+
 <section class="slide" id="iife-arguments">
     <h2>IIFE</h2>
     
@@ -176,7 +200,6 @@
         
 (function ($, _, unitConverter) {
     
-    
     ...
     
     window.Ruler = { ... };
@@ -186,27 +209,53 @@
         
     </pre>  
 
-    
+<p>* foo.js must set window['foo']</p>    
 
 </section>
 
 
 <section class="slide" id="iife-refactored">
-    <h2>Fun with Functions</h2>
+    <h2>(A)IIFE</h2>
     
-    <h3>Turn the IIFE Into a Callback</h3>    
+    <h3>(Almost) Immediately Invoked Function Expression</h3>    
+    <pre>
+
+loadScripts_then_callFunction(
+    [load('jquery.js'), load('underscore.js'), load('units.js')], 
+    function ($, _, unitConverter) {
+
+        ...
+    
+        window.Ruler = { ... };
+    
+    }
+)        
+        
+    </pre>  
+
+    <p>* foo.js must set window['foo']</p>
+
+</section>
+
+
+
+
+<section class="slide" id="iife-refactored-2">
+    <h2>(A)IIFE</h2>
+    
+    <h3>(Almost) Immediately Invoked Function Expression</h3>    
     <pre>
 
 loadScripts_then_callFunction(
     ['jquery.js', 'underscore.js', 'units.js'], 
     function ($, _, unitConverter) {
 
+        ...
     
-    ...
+        window.Ruler = { ... };
     
-    window.Ruler = { ... };
-    
-})        
+    }
+)        
         
     </pre>  
 
@@ -219,7 +268,7 @@ loadScripts_then_callFunction(
 
 
 <section class="slide" id="drop-the-dotjs">
-    <h2>Fun with Functions</h2>
+    <h2>(A)IIFE</h2>
     
     <h3>Drop the .js</h3>
     
@@ -229,12 +278,12 @@ loadScripts_then_callFunction(
     ['jquery', 'underscore', 'units'], 
     function ($, _, unitConverter) {
 
+        ...
     
-    ...
+        window.Ruler = { ... };
     
-    window.Ruler = { ... };
-    
-})        
+    }
+)        
         
     </pre>  
 
@@ -243,7 +292,7 @@ loadScripts_then_callFunction(
 </section>
 
 <section class="slide" id="window-to-return">
-    <h2>Fun with Functions</h2>
+    <h2>(A)IIFE</h2>
     
     <h3>Decouple the file name</h3>
     
@@ -253,12 +302,12 @@ loadScripts_then_callFunction(
     ['jquery', 'underscore', 'units'], 
     function ($, _, unitConverter) {
 
+        ...
     
-    ...
+        return { ... };
     
-    return { ... };
-    
-})        
+    }
+)        
         
     </pre>  
 
@@ -270,7 +319,10 @@ loadScripts_then_callFunction(
 
 
 <section class="slide" id="window-to-return">
-    <h2>O Hai, AMD</h2>
+    
+    <h2>(A)IIFE</h2>
+    
+    <h3>O Hai, AMD</h3>
     
     
     <pre>
@@ -279,16 +331,16 @@ define(
     ['jquery', 'underscore', 'units'], 
     function ($, _, unitConverter) {
 
+        ...
     
-    ...
+        return { ... };
     
-    return { ... };
-    
-})        
+    }
+)        
         
     </pre>  
 
-<p><del>* foo.js must set window['foo']</del> <ins>(return value is stored <del>in window['foo']</del> a closure automatically)</ins></p>
+<p><del>* foo.js must set window['foo']</del> (return value is stored <del>in window['foo']</del> <ins>a closure</ins> automatically)</p>
 
 </section>
 

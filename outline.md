@@ -1,3 +1,5 @@
+#AMD Be Lazy, Not Sloppy
+
 ## What 5 things do I wan to cover?
 1. Why we need AMD (why IIFEs and namespaces are bad).
 2. How AMD works
@@ -7,7 +9,7 @@
 
 ## It's 1999...
 
-Y2K is about to go down, Prince (symbol) is paryting, we're writing sloppy JavaScript
+Y2K is about to go down, Prince (symbol) is partying, we're writing sloppy JavaScript
 
 What was so bad?
 
@@ -27,11 +29,23 @@ That's essentially what define does. define(['A', 'B'], function(a, b) { return 
 Note that a and b don't have to be objects. They can be numbers, strings, functions...
 Show a few examples of simple modules (repetition!).
 
+- return a function
+- return a string
+- return nothing
+- load jquery
+- load a specific version of jQuery
+- load a css file with !css
+- load text with !text
+- load a plain old javascript file
+- load a template (e.g. markdown)
+
 Dependencies are automatically resolved.
 R.js automatically resolves concatenates with dependencies.
 almond.js is an optimized, minimal loader.
 
 *Use a BMI calculator as the example. Dependencies are height and weight. BMI = scale.weight().inKilograms() / Math.pow( measuringTape.height().inMeters(), 2) 
+*Or something more trivial, like adding a rainbow border to every mention of Charlotte JS
+
 
 
 # Who's using AMD?
@@ -49,4 +63,7 @@ Use plugins like css! and text!
 Require a plain JS file with js!
 Make your own plugins.
 
+# Ideas 
+
+!atleast plugin (e.g. jQuery at least 1.5.1 -- if 1.7.2 is loaded, don't load another version)
 
