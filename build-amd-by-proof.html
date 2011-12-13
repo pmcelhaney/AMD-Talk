@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->  <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Asynchronous Module Definitions</title>
+    
+    <meta name="viewport" content="width=1024, user-scalable=no">
+    
+    <!-- Core and extension CSS files -->
+    <link rel="stylesheet" href="deckjs/core/deck.core.css">
+    <link rel="stylesheet" href="deckjs/extensions/goto/deck.goto.css">
+    <link rel="stylesheet" href="deckjs/extensions/menu/deck.menu.css">
+    <link rel="stylesheet" href="deckjs/extensions/navigation/deck.navigation.css">
+    <link rel="stylesheet" href="deckjs/extensions/status/deck.status.css">
+    <link rel="stylesheet" href="deckjs/extensions/hash/deck.hash.css">
+    
+    
+    <!-- Theme CSS files (menu swaps these out) -->
+    <link rel="stylesheet" id="style-theme-link" href="deckjs/themes/style/web-2.0.css">
+    <link rel="stylesheet" id="transition-theme-link" href="deckjs/themes/transition/fade.css">
+    
+    <!-- Custom CSS just for this page -->
+    <link rel="stylesheet" href="deckjs/introduction/introduction.css">
+    
+    <script src="deckjs/modernizr.custom.js"></script>
+
+    
+</head>
+
+<body class="deck-container">
+
+
+<section class="slide" id="title-slide">
+    <h1>Asynchronous Module Definition (AMD)</h1>
+</section>
+
+
+
+<section class="slide" id="1999">
+    <h2>It's 1999...</h2>
+    <ul>
+        <li class="slide">Y2K</li>
+        <li class="slide">Prince</li>
+        <li class="slide">Sloppy JavaScript</li>
+    </ul>   
+</section>
+
+<section class="slide" id="1999">
+    <h2>Sloppy JavaScript</h2>
+    <ul>
+        <li class="slide">Polluting the global namespace. (picture of pollution / factory - "the dark side of the factory pattern")</li>
+        <li class="slide">Downloading too many scripts. (screenshot of yslow or <a href="http://www.flickr.com/photos/garryknight/2744629787/">man carrying books</a>)</li>
+        <li class="slide">Dependencies must load in the right order. (<a href="http://www.flickr.com/photos/tychay/2289129967/">YUI dependency tree</a>)</li>
+    </ul>   
+</section>
+
+<section class="slide" id="global-pollution">
+    <h2>Polluting the global namespace</h2>
+    
+    <h3>scale.js</h3>
+    <pre>
+        var settings = { 
+            min: 100,
+            max: 500,
+            unit: 'lb'
+        };
+        ...
+    </pre>  
+    
+    <h3>ruler.js</h3>
+    <pre>
+        var settings = {
+            length: 36,
+            offset: 50,
+            unit: 'in'
+        }
+        ...
+    </pre>  
+
+</section>
+
+<section class="slide" id="global-pollution-2">
+    <h2>Polluting the global namespace (2)</h2>
+    
+    <h3>scale.js</h3>
+    <pre>
+        window.Scale = {
+            settings: { 
+                min: 100,
+                max: 500,
+                unit: 'lb'
+            },
+            ...
+        }
+    </pre>  
+    
+    <h3>ruler.js</h3>
+    <pre>
+        window.Ruler = {
+            settings:  {
+                length: 36,
+                offset: 50,
+                unit: 'in'
+            },
+            ...
+        }
+    </pre>  
+
+</section>
+
+
+
+<section class="slide" id="iife">
+    <h2>IIFE</h2>
+    
+    <h3>Immediately Invoked Function Expression</h3>
+    
+    <pre>
+        
+<strong>(function () {</strong>
+    var settings = {  
+        min: 100,
+        max: 500,
+        unit: 'lb'
+    };
+    
+    ...
+    
+    window.Ruler = { ... };
+
+<strong>})();</strong>
+        
+        
+    </pre>  
+
+    
+
+</section>
+
+
+<section class="slide" id="iife-stripped">
+    <h2>IIFE</h2>
+    
+    <h3>Immediately Invoked Function Expression</h3>
+    
+    <pre>
+        
+<strong>(function () {</strong>
+
+    ...
+    
+    window.Ruler = { ... };
+
+<strong>})();</strong>
+        
+        
+    </pre>  
+
+    
+
+</section>
+
+
+
+<section class="slide" id="iife-arguments">
+    <h2>IIFE</h2>
+    
+    <h3>Immediately Invoked Function Expression</h3>
+    
+    <pre>
+        
+(function (<strong>$, _, unitConverter</strong>) {
+
+    ...
+    
+    window.Ruler = { ... };
+
+})(<strong>window.jQuery, window._, window.UNITS</strong>);
+        
+        
+    </pre>  
+
+    
+
+</section>
+
+
+
+<section class="slide" id="iife-lazyload">
+    <h2>IIFE</h2>
+    
+    <h3>Immediately Invoked Function Expression</h3>
+    
+    <pre>
+        
+(function ($, _, unitConverter) {
+    
+    ...
+    
+    window.Ruler = { ... };
+
+})(<strong>load('lib/jquery.js'), load('lib/underscore.js'), load('units.js')</strong>);
+        
+        
+    </pre>  
+
+<p>* foo.js must set window['foo']</p>    
+
+</section>
+
+
+
+
+
+<section class="slide" id="iife-refactored-2">
+    <h2>(A)IIFE</h2>
+    
+    <h3>(Almost) Immediately Invoked Function Expression</h3>    
+    <pre>
+
+lazyLoad(
+    ['jquery.js', 'underscore.js', 'units.js'], 
+    function ($, _, unitConverter) {
+
+        ...
+    
+        window.Ruler = { ... };
+    
+    }
+)        
+        
+    </pre>  
+
+    <p>* foo.js must set window['foo']</p>
+
+</section>
+
+
+
+
+
+<section class="slide" id="drop-the-dotjs">
+    <h2>(A)IIFE</h2>
+    
+    <h3>Drop the .js</h3>
+    
+    <pre>
+
+lazyLoad(
+    ['jquery', 'underscore', 'units'], 
+    function ($, _, unitConverter) {
+
+        ...
+    
+        window.Ruler = { ... };
+    
+    }
+)        
+        
+    </pre>  
+
+<p>* foo.js must set window['foo']</p>
+
+</section>
+
+<section class="slide" id="window-to-return">
+    <h2>(A)IIFE</h2>
+    
+    <h3>Decouple the file name</h3>
+    
+    <pre>
+
+lazyLoad(
+    ['jquery', 'underscore', 'units'], 
+    function ($, _, unitConverter) {
+
+        ...
+    
+        return { ... };
+    
+    }
+)        
+        
+    </pre>  
+
+<p><del>* foo.js must set window['foo']</del> <ins>(return value is stored in window['foo'] automatically)</ins></p>
+
+</section>
+
+
+
+
+<section class="slide" id="window-to-return">
+    
+    <h2>(A)IIFE</h2>
+    
+    <h3>O Hai, AMD</h3>
+    
+    
+    <pre>
+
+define(
+    ['jquery', 'underscore', 'units'], 
+    function ($, _, unitConverter) {
+
+        ...
+    
+        return { ... };
+    
+    }
+)        
+        
+    </pre>  
+
+<p><del>* foo.js must set window['foo']</del> (return value is stored <del>in window['foo']</del> <ins>a closure</ins> automatically)</p>
+
+</section>
+
+
+<a href="#" class="deck-prev-link" title="Previous">&#8592;</a>
+<a href="#" class="deck-next-link" title="Next">&#8594;</a>
+
+<p class="deck-status">
+    <span class="deck-status-current"></span>
+    /
+    <span class="deck-status-total"></span>
+</p>
+
+<form action="." method="get" class="goto-form">
+    <label for="goto-slide">Go to slide:</label>
+    <input type="number" name="slidenum" id="goto-slide">
+    <input type="submit" value="Go">
+</form>
+
+<a href="." title="Permalink to this slide" class="deck-permalink">#</a>
+
+
+  <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+  <script>window.jQuery || document.write('<script src="deckjs/jquery-1.6.4.min.js"><\/script>')</script>
+
+<!-- Deck Core and extensions -->
+<script src="deckjs/core/deck.core.js"></script>
+<script src="deckjs/extensions/menu/deck.menu.js"></script>
+<script src="deckjs/extensions/goto/deck.goto.js"></script>
+<script src="deckjs/extensions/status/deck.status.js"></script>
+<script src="deckjs/extensions/navigation/deck.navigation.js"></script>
+<script src="deckjs/extensions/hash/deck.hash.js"></script>
+
+<!-- Specific to this page -->
+<script type="text/javascript" charset="utf-8">
+    $(function () {
+        $.deck('.slide');
+    });
+</script>
+
+
+</body>
+</html>
