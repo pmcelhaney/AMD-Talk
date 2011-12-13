@@ -214,29 +214,6 @@
 </section>
 
 
-<section class="slide" id="iife-refactored">
-    <h2>(A)IIFE</h2>
-    
-    <h3>(Almost) Immediately Invoked Function Expression</h3>    
-    <pre>
-
-loadScripts_then_callFunction(
-    [load('jquery.js'), load('underscore.js'), load('units.js')], 
-    function ($, _, unitConverter) {
-
-        ...
-    
-        window.Ruler = { ... };
-    
-    }
-)        
-        
-    </pre>  
-
-    <p>* foo.js must set window['foo']</p>
-
-</section>
-
 
 
 
@@ -246,7 +223,7 @@ loadScripts_then_callFunction(
     <h3>(Almost) Immediately Invoked Function Expression</h3>    
     <pre>
 
-loadScripts_then_callFunction(
+lazyLoad(
     ['jquery.js', 'underscore.js', 'units.js'], 
     function ($, _, unitConverter) {
 
@@ -274,7 +251,7 @@ loadScripts_then_callFunction(
     
     <pre>
 
-loadScripts_then_callFunction(
+lazyLoad(
     ['jquery', 'underscore', 'units'], 
     function ($, _, unitConverter) {
 
@@ -298,7 +275,7 @@ loadScripts_then_callFunction(
     
     <pre>
 
-loadScripts_then_callFunction(
+lazyLoad(
     ['jquery', 'underscore', 'units'], 
     function ($, _, unitConverter) {
 
