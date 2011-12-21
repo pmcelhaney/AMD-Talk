@@ -235,71 +235,158 @@ module does this...
     </pre>  
 </section>
 
+<section class="slide">
+<h2>Problem</h2>    
+    
+<p>Now you have local names a the top and global names at the bottom.</p>    
+    
+</section>
 
-<section class="slide" id="the-rest">
-
-<h2>To be split into slides...</h2>
+<section class="slide" id="define-introduction">
+<h2>Solution</h2>
 
 <pre>
--> Problem: Now you have local names a the top and global names at the bottom
-Solution:
-   define([jQuery, CLTJS.YqlStockQuoteFinder], function ($, stockQuoteFinder) {
-    ...
-   });
-   
-   function define(dependencies, iife) {
-        iife.call(dependencies);
-   }
-   
-Now dependencies are declared at the top. 
-... Looks an awful lot like require from Ruby
-... or import from Java.
-   
-What if we expand this define function to automatically "import" the required scripts?
-1. Instead of a reference to module (it doesn't exist yet), we specify its name.
-   define(['jQuery', 'YqlStockQuoteFinder'], ...)
-2. Each module has to have a name.
-   define('myModule', ...)
-3. Each module defines one object.
-   return { ... }
-   
-This is what AMD looks like.
-
-A concrete example.
-
-Back to abstract example. 
-- The name is optional. 
-- The dependencies are also optional
-- return is also optional
-
-The basic form of AMD:
-define(name?, dependencies?, definitionFunction)
-
-Real example that returns an object
-Real example that returns an array
-Real example that returns a function
-Real example that returns a string
-
-* * * * 
-
-Concatenation with r.js
-
-Using almond shim in production
-
-
-* * * *
-
-Plugins!
-
-require, exports, module
-
-require does this...
-exports does this...
-module does this...
-
+    define([jQuery, CLTJS.YqlStockQuoteFinder], function ($, stockQuoteFinder) {
+     ...
+    });
 
 </pre>
+
+
+<pre>
+    function define(dependencies, iife) {
+         iife.call(dependencies);
+    }    
+</pre>
+
+
+<p>
+    Now dependencies are declared at the top. 
+   <ul>
+       <li>Looks an awful lot like require from Ruby</li>
+       <li>or import from Java.</li>    
+    </ul>
+</p>
 </section>
+
+
+<section class="slide">
+
+<pre>    
+    What if we expand this define function to automatically "import" the required scripts?
+    1. Instead of a reference to module (it doesn't exist yet), we specify its name.
+       define(['jQuery', 'YqlStockQuoteFinder'], ...)
+    2. Each module has to have a name.
+       define('myModule', ...)
+    3. Each module defines one object.
+       return { ... }
+</pre>    
+    
+</section>
+
+
+<section class="slide">
+    <h2>Define: The &lt;3 of AMD</h2>
+    
+    
+    <pre>(an abstract example)</pre>
+    
+    <pre>(a concrete example)</pre>
+</section>
+
+
+<section class="slide">
+    <h2>Define: The &lt;3 of AMD</h2>
+
+    <pre>(an abstract example -- without optional name)</pre>
+
+    <p>(Drop the name, then the dependencies, then the return, showing all are optional.)</p>
+</section>
+
+
+<section class="slide" id="define-signature">
+    <h2>Define: The &lt;3 of AMD</h2>
+
+    <pre>define(name?, dependencies?, definitionFunction)</pre>
+
+    <p>(Drop the name, then the dependencies, then the return, showing all are optional.)</p>
+</section>
+
+
+<section class="slide" id="example-object">
+
+    <pre>real example that returns an object</pre>
+
+</section>
+
+<section class="slide" id="example-array">
+
+    <pre>real example that returns an array</pre>
+
+</section>
+
+<section class="slide" id="example-function">
+
+    <pre>real example that returns a function</pre>
+
+</section>
+
+<section class="slide" id="example-string">
+
+    <pre>real example that returns a string</pre>
+
+</section>
+
+
+<section class="slide" id="r-js">
+    
+    <h2>r.js</h2>
+    
+    <p>Explain how concatenation works</p>
+
+</section>
+
+
+<section class="slide" id="r-js">
+    
+    <h2>Almond</h2>
+    
+    <ul>
+        <li>concatenated files</li>
+        <li>xx kb</li>
+        <li>production</li>    
+    </ul>
+
+</section>
+
+
+<section class="slide" id="plugins">
+    <h2>Plugins!</h2>
+    
+</section>
+
+
+<section class="slide" id="require-exports-module">
+    <h2>require, exports, module</h2>
+    
+    <p>(Using it with Node would be more interesting.)</p>
+
+</section>
+
+<section class="slide" id="libraries">
+    <h2>require, exports, module</h2>
+    
+    <ul>
+        <li>Plugins on wiki</li>
+        <li>Dojo collection</li>
+        <li>Miller's collection</li>
+        <li>jQuery, underscore, etc.</li>
+    </ul>
+
+</section>
+
+
+
 
 
 <section class="slide">
