@@ -1,6 +1,6 @@
 #AMD Be Lazy, Not Sloppy
 
-## What 5 things do I wan to cover?
+## What 5 things do I want to cover?
 1. Why we need AMD (why IIFEs and namespaces are bad).
 2. How AMD works
 3. Concatenating
@@ -114,7 +114,7 @@ explaining how this version of the define function works.)
 
 This is very close to the way AMD works.
 
-[More proper define with a partial implementation]
+[Proper define with a partial implementation]
 
 This is an actual AMD module. The difference is it doesn't create 
 any global variables. Instead, it returns a value that represents 
@@ -165,12 +165,17 @@ almond.js is an optimized, minimal loader.
 
 # Review the three problems we're trying to solve.
 
+- Global pollution
+- Scripts granularity
+- Dependency resolution
+
+
 
 # Who's using AMD?
 
 RequireJS
 Curl
-Dojo(?)
+Dojo
 All the libraries that use / support it.
 All the module libraries that are popping up.
 
