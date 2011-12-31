@@ -222,7 +222,7 @@ module does this...
 
 
 <section class="slide" id="iife-arguments">
-    <h2>Solution</h2>
+    <h2>IIFE++</h2>
     
     <pre>
         
@@ -239,8 +239,8 @@ module does this...
 
 
 
-<section class="slide" id="iife-arguments">
-    <h2>Solution</h2>
+<section class="slide" id="iife-arguments-2">
+    <h2>IIFE++</h2>
     
     <pre>
         
@@ -255,14 +255,19 @@ module does this...
 </section>
 
 
-<section class="slide" id="iife-arguments">
-    <h2>Solution</h2>
+<section class="slide" id="iife-arguments-3">
+    <h2>IIFE++</h2>
     
     <pre>
         
 (function (<strong>$, quoteLookup</strong>) {
 
-    ...
+    /* 
+      A 
+      whole 
+      lotta
+      stuff
+    */
     
 })(<strong>jQuery, CLTS.quoteLookupFromYQL</strong>);
         
@@ -270,28 +275,24 @@ module does this...
     </pre>  
 </section>
 
-<section class="slide">
-<h2>Problem</h2>    
-    
-<p>Now you have local names a the top and global names at the bottom.</p>    
-    
-</section>
 
 <section class="slide" id="define-introduction">
-<h2>Solution</h2>
+<h2><del>II</del>FE</h2>
 
 <pre>
-    define([jQuery, CLTJS.YqlStockQuoteFinder], function ($, stockQuoteFinder) {
-     ...
-    });
+define( [jQuery, CLTJS.YqlStockQuoteFinder], 
+    function ($, stockQuoteFinder) {
+    ...
+    }
+);
 
 </pre>
 
 
-<pre>
-    function define(dependencies, iife) {
-         iife.apply(dependencies);
-    }    
+<pre class="slide">
+var define = function(dependencies, callback) {
+     callback.apply(dependencies);
+};    
 </pre>
 
 
@@ -324,9 +325,36 @@ module does this...
     <h2>Define: The &lt;3 of AMD</h2>
     
     
-    <pre>(an abstract example)</pre>
+<pre>
+    define('moduleC', ['moduleA', 'moduleB'], function (a, b) {
+            
+            var thisModule = {}; 
+            
+            ...
+            thisModule.doSomethingWith(a);
+            thisModule.doSomethingWith(b);
+            ...
+            
+            return thisModule;
+        }
+    );
+</pre>
     
-    <pre>(a concrete example)</pre>
+<pre>
+    define('division', ['underscore', 'keymaster'], function (_, key) {
+            
+            var thisModule = {}; 
+            
+            ...
+            thisModule.doSomethingWith(a);
+            thisModule.doSomethingWith(b);
+            ...
+            
+            return thisModule;
+        }
+    );
+</pre>
+
 </section>
 
 
