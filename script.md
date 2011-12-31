@@ -178,6 +178,7 @@ Curl
 Dojo
 All the libraries that use / support it.
 All the module libraries that are popping up.
+http://unscriptable.com/code/Using-AMD-loaders/#15
 
 
 # Protips

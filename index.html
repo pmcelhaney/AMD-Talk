@@ -117,18 +117,73 @@ module does this...
 <section class="slide">
     <h2>History</h2>
     <ul>
-        <li>James Burke (Dojo, etc.) [add photo]</li>
-        <li>RequireJS</li>
-        <li>AMD</li>
-        <li>Curl, etc.</li>    
+        <li class="slide">James Burke (Dojo, etc.) [add photo]</li>
+        <li class="slide">RequireJS</li>
+        <li class="slide">AMD</li>
+        <li class="slide">Curl, Yabble, PINF, etc.</li>    
     </ul>
+
+</section>
+
+<section class="slide">
+    <h2>3 Problems</h2>
+    <p>(2012 calendar)</p>
+</section>
+
+<section class="slide">
+    <h2>Global Pollution</h2>
+    <p>(Al Gore)</p>
+</section>
+
+<section class="slide">
+    <h2>Script Size</h2>
+    <p>(Megablock)</p>
+</section>
+
+<section class="slide">
+    <h2>Too many scripts</h2>
+    <p>(img of lots of script tags)</p>
+</section>
+
+
+<section class="slide">
+<h2>Scopes</h2>
+
+<pre>
+    
+    var name = "Stewart";
+    
+    var vampire = function () {
+        var name = "Pattison";
+        console.log(name);
+    };
+    
+    var wolf = function () {
+        var name = "Lautner";
+        console.log(name);
+    };
+    
+    var human = function () {
+        console.log(name);
+    };
+</pre>
 
 </section>
 
 
 <section class="slide" id="iife-review">
-    <h2>Review: Why IIFEs</h2>
-    <p>(Show how function creates local scope)</p>
+    <h2>IIFE</h2>
+
+    <h3>Immediately Invoked Function Expression</h3>
+
+    <pre>
+<strong>(function () {</strong>
+    var a = "foo", b = "bar";
+    ...
+
+<strong>})();</strong>
+    </pre>
+
 </section>
 
 <section class="slide" id="iife-with-global">
@@ -137,16 +192,12 @@ module does this...
     <h3>Immediately Invoked Function Expression</h3>
     
     <pre>
-        
-<strong>(function () {</strong>
-
+(function () {
+    var a = "foo", b = "bar";
     ...
     
-    window.myModule = { ... };
-
-<strong>})();</strong>
-        
-        
+    <strong>window.myModule = { ... };</strong>
+})();
     </pre>  
 
 </section>
@@ -158,33 +209,15 @@ module does this...
     
     <h3>Immediately Invoked Function Expression</h3>
     
-    <pre>
-        
-<strong>(function () {</strong>
-
+<pre>
+(function () {
+    var a = "foo", b = "bar";
     ...
-    
-    CLTJS.myModule = { ... };
 
-<strong>})();</strong>
-        
-        
-    </pre>  
+    <strong>CLTJS</strong>.myModule = { ... };
+})();
+</pre>
 
-
-
-</section>
-
-
-
-
-
-<section class="slide" id="iife-problems">
-    <h2>Problems</h2>
-    <ul>
-        <li class="slide">Namespace Collisions</li>    
-        <li class="slide">Coupling</li>    
-    </ul>    
 </section>
 
 
@@ -211,11 +244,11 @@ module does this...
     
     <pre>
         
-(function (<strong>moduleA, moduleB</strong>) {
+(function (moduleA, moduleB) {
 
     ...
     
-})(<strong>CLTJS.moduleX, CLTS.moduleY</strong>);
+})(CLTJS.module<strong>X</strong>, CLTS.module<strong>Y</strong>);
         
         
     </pre>  
@@ -257,7 +290,7 @@ module does this...
 
 <pre>
     function define(dependencies, iife) {
-         iife.call(dependencies);
+         iife.apply(dependencies);
     }    
 </pre>
 
