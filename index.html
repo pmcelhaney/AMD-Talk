@@ -341,44 +341,88 @@ var define = function(dependencies, callback) {
 </pre>
     
 <pre>
-    define('division', ['underscore', 'keymaster'], function (_, key) {
-            
-            var thisModule = {}; 
-            
-            ...
-            thisModule.doSomethingWith(a);
-            thisModule.doSomethingWith(b);
-            ...
-            
-            return thisModule;
-        }
-    );
+define('pickColor', ['constants', 'hsvToRgb'], function (constants, hsvToRgb) {
+        
+        return function (n) {
+            var hue = n * constants.phi - floor(n * constants.phi);
+            return hsvToRgb(hue, 0.5, 0.95);
+        };
+    }
+);
 </pre>
 
 </section>
 
 
-<section class="slide">
-    <h2>Define: The &lt;3 of AMD</h2>
+<section class="slide" id="optional-1">
+    <h2>Optional Parameter is Optional</h2>
 
-    <pre>(an abstract example -- without optional name)</pre>
+    <pre>
+define('myModule', ['depencyA', 'dependencyB'], function (a, b) {
+    /* do stuff */
+    return theModule;
+});
+    </pre>
+</section>
 
-    <p>(Drop the name, then the dependencies, then the return, showing all are optional.)</p>
+
+<section class="slide" id="optional-2">
+    <h2>Name is Optional</h2>
+
+    <pre>
+define(['depencyA', 'dependencyB'], function (a, b) {
+    /* do stuff */
+    return theModule;
+});
+    </pre>
+</section>
+
+
+<section class="slide" id="optional-3">
+    <h2>Dependencies Are Optional</h2>
+
+    <pre>
+define([], function () {
+    /* do stuff */
+    return theModule;
+});
+    </pre>
+</section>
+
+<section class="slide" id="optional-4">
+    <h2>Dependencies Are Optional</h2>
+
+    <pre>
+define(function () {
+    /* do stuff */
+    return theModule;
+});
+    </pre>
+</section>
+
+<section class="slide" id="optional-4">
+    <h2>Return Is Optional</h2>
+
+    <pre>
+define(function () {
+    /* do stuff */
+    
+});
+    </pre>
 </section>
 
 
 <section class="slide" id="define-signature">
-    <h2>Define: The &lt;3 of AMD</h2>
+    <h2>Signature</h2>
 
     <pre>define(name?, dependencies?, definitionFunction)</pre>
 
-    <p>(Drop the name, then the dependencies, then the return, showing all are optional.)</p>
 </section>
 
 
 <section class="slide" id="example-object">
 
-    <pre>real example that returns an object</pre>
+<pre>real example that returns an object</pre>
 
 </section>
 
@@ -399,6 +443,36 @@ var define = function(dependencies, callback) {
     <pre>real example that returns a string</pre>
 
 </section>
+
+
+
+<section class="slide" id="loaders">
+    
+    <h2>Loading with RequireJS</h2>
+    
+<pre class="slide">
+    require('./my-app/main-module');
+</pre>
+
+<pre class="slide">
+    require({ 
+        urlArgs: "bust=" +  (new Date()).getTime(), 
+        baseUrl: '/path/to/my/app',
+        ...
+    },
+    'main-module');
+</pre>
+
+<pre class="slide">
+    &lt;script 
+        type="text/javascript" 
+        src="scripts/require.js"
+        <strong>data-main="my-app-main-module"</strong>
+    &gt;&lt;/script&gt;
+</pre>
+
+</section>
+
 
 
 <section class="slide" id="r-js">
@@ -437,7 +511,7 @@ var define = function(dependencies, callback) {
 </section>
 
 <section class="slide" id="libraries">
-    <h2>require, exports, module</h2>
+    <h2>Who's Using AMD?</h2>
     
     <ul>
         <li>Plugins on wiki</li>
