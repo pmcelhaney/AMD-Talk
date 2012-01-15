@@ -99,7 +99,7 @@ module does this...
     <link rel="stylesheet" id="transition-theme-link" href="deckjs/themes/transition/fade.css">
     
     <!-- Custom CSS just for this page -->
-    <link rel="stylesheet" href="deckjs/introduction/introduction.css">
+    <link rel="stylesheet" href="amd.css">
     
     <script src="deckjs/modernizr.custom.js"></script>
 
@@ -115,17 +115,6 @@ module does this...
 
 
 <section class="slide">
-    <h2>History</h2>
-    <ul>
-        <li class="slide">James Burke (Dojo, etc.) [add photo]</li>
-        <li class="slide">RequireJS</li>
-        <li class="slide">AMD</li>
-        <li class="slide">Curl, Yabble, PINF, etc.</li>    
-    </ul>
-
-</section>
-
-<section class="slide">
     <h2>3 Problems</h2>
     <p>(2012 calendar)</p>
 </section>
@@ -137,12 +126,23 @@ module does this...
 
 <section class="slide">
     <h2>2. Reduce, Reuse, Recycle</h2>
-    <p>(Recycle symbol, Megablock)</p>
+    <p>(Recycle symbol, Megablock, cognitive load, SRP, REP, savings calculator, legos?)</p>
 </section>
+
 
 <section class="slide">
     <h2>3. Respect the (Browser) Environment</h2>
     <p>(img of lots of script tags)</p>
+</section>
+
+
+<section class="slide" id="tools">
+    <h2>Tools</h2>
+    
+    <ul>
+        <li><img src="images/TextMate.png" width="256" height="256" alt="TextMate"></li>
+        <li><img src="images/chrome-logo.png" width="256" height="256" alt="Google Chrome"></li>
+    </ul>
 </section>
 
 
@@ -258,10 +258,7 @@ module does this...
     </pre>  
 </section>
 
-
-
-
-<section class="slide" id="iife-arguments-2">
+<section class="slide" id="frickin-laser">
     <h2>spaceLaserInator.js</h2>
     
     <pre>
@@ -272,7 +269,25 @@ module does this...
     laser.pointAt(window);
     CLTJS.spaceLaserInator = inator.with(laser);
         
-})(CLTJS.<strong>frickinLaser</strong>, <strong>jQuery</strong>);
+})(CLTJS.<strong>frickinLaser</strong>, CLTJS.inator);
+        
+        
+    </pre>  
+</section>
+
+
+<section class="slide" id="frickin-jQuery">
+    <h2>spaceLaserInator.js</h2>
+    
+    <pre>
+(function (laser, inator) {
+    
+    ...
+    inator.attach('&lt;button&gt;');
+    laser.pointAt(window);
+    CLTJS.spaceLaserInator = inator.with(laser);
+        
+})(CLTJS.frickinLaser, <strong>jQuery</strong>);
         
         
     </pre>  
@@ -316,6 +331,7 @@ define( <strong>[CLTJS.frickinLaser, jQuery]</strong>,
 );
 
 </pre>
+
 
 
 <pre class="slide">
@@ -590,21 +606,31 @@ define('constants', {
 
 <section class="slide" id="r-js">
     
-    <h2>r.js</h2>
+<h2>Concatenated builds with r.js</h2>
     
-    <p>Explain how concatenation works</p>
+<pre class="slide">
+$ npm install require.js
+</pre>
+
+<pre class="slide">
+$ r.js /path/to/main.js    
+</pre>
+
+<pre class="slide">
+$ r.js -o <a href="https://github.com/jrburke/r.js/blob/master/build/example.build.js" target="_blank">build.js</a>    
+</pre>
 
 </section>
 
 
-<section class="slide" id="r-js">
+<section class="slide" id="almond">
     
     <h2>Almond</h2>
     
     <ul>
-        <li>concatenated files</li>
-        <li>xx kb</li>
-        <li>production</li>    
+        <li class="slide">concatenated files</li>
+        <li class="slide">production</li>    
+        <li class="slide">857 bytes</li>
     </ul>
 
 </section>
@@ -616,11 +642,9 @@ define('constants', {
 </section>
 
 
-<section class="slide" id="require-exports-module">
-    <h2>require, exports, module</h2>
+<section class="slide" id="node">
+    <h2>Node</h2>
     
-    <p>(Using it with Node would be more interesting.)</p>
-
 </section>
 
 <section class="slide" id="libraries">
