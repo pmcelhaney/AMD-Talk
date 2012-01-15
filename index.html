@@ -131,17 +131,17 @@ module does this...
 </section>
 
 <section class="slide">
-    <h2>Global Pollution</h2>
+    <h2>1. Stop Polluting the Global Namespace</h2>
     <p>(Al Gore)</p>
 </section>
 
 <section class="slide">
-    <h2>Script Size</h2>
-    <p>(Megablock)</p>
+    <h2>2. Reduce, Reuse, Recycle</h2>
+    <p>(Recycle symbol, Megablock)</p>
 </section>
 
 <section class="slide">
-    <h2>Too many scripts</h2>
+    <h2>3. Respect the (Browser) Environment</h2>
     <p>(img of lots of script tags)</p>
 </section>
 
@@ -154,17 +154,17 @@ module does this...
     var name = "Stewart";
     
     var vampire = function () {
-        var name = "Pattison";
-        console.log(name);
+        var name = "Pattinson";
+        console.log("Robert " + name);
     };
     
     var wolf = function () {
         var name = "Lautner";
-        console.log(name);
+        console.log("Taylor " + name);
     };
     
     var human = function () {
-        console.log(name);
+        console.log(Kristen " + name);
     };
 </pre>
 
@@ -193,10 +193,10 @@ module does this...
     
     <pre>
 (function () {
-    var a = "foo", b = "bar";
+    var wavelength = 132, color = "#00f";
     ...
     
-    <strong>window.myModule = { ... };</strong>
+    <strong>window.spaceLaserInator = { ... };</strong>
 })();
     </pre>  
 
@@ -210,11 +210,31 @@ module does this...
     <h3>Immediately Invoked Function Expression</h3>
     
 <pre>
+<strong>CLTJS = window.CLTJS || {};  </strong>  
+    
 (function () {
-    var a = "foo", b = "bar";
+    var wavelength = 132, color = "#00f";
     ...
 
-    <strong>CLTJS</strong>.myModule = { ... };
+    <strong>CLTJS</strong>.spaceLaserInator = ... ;
+})();
+</pre>
+
+</section>
+
+
+<section class="slide" id="iife-with-different-dependency-name">
+    <h2>spaceLaserInator.js</h2>
+<pre>
+(function () {
+    
+    var <strong>laser</strong> = <strong>CLTJS.laser</strong>;
+    var <strong>inator</strong> = <strong>CTLJS.inator</strong>;
+    
+    ...
+    <strong>inator</strong>.attach('&lt;button&gt;');
+    <strong>laser</strong>.pointAt(window);
+    CLTJS.spaceLaserInator = <strong>inator</strong>.with(<strong>laser</strong>);
 })();
 </pre>
 
@@ -222,15 +242,17 @@ module does this...
 
 
 <section class="slide" id="iife-arguments">
-    <h2>IIFE++</h2>
+    <h2>spaceLaserInator.js</h2>
     
     <pre>
-        
-(function (<strong>moduleA, moduleB</strong>) {
-
+(function (<strong>laser, inator</strong>) {
+    
     ...
+    inator.attach('&lt;button&gt;');
+    laser.pointAt(window);
+    CLTJS.spaceLaserInator = inator.with(laser);
 
-})(<strong>CLTJS.moduleA, CLTS.moduleB</strong>);
+})(<strong>CLTJS.laser, CLTJS.inator</strong>);
         
         
     </pre>  
@@ -240,15 +262,17 @@ module does this...
 
 
 <section class="slide" id="iife-arguments-2">
-    <h2>IIFE++</h2>
+    <h2>spaceLaserInator.js</h2>
     
     <pre>
-        
-(function (moduleA, moduleB) {
-
-    ...
+(function (laser, inator) {
     
-})(CLTJS.module<strong>X</strong>, CLTS.module<strong>Y</strong>);
+    ...
+    inator.attach('&lt;button&gt;');
+    laser.pointAt(window);
+    CLTJS.spaceLaserInator = inator.with(laser);
+        
+})(CLTJS.<strong>frickinLaser</strong>, <strong>jQuery</strong>);
         
         
     </pre>  
@@ -256,33 +280,38 @@ module does this...
 
 
 <section class="slide" id="iife-arguments-3">
-    <h2>IIFE++</h2>
+    <h2>spaceLaserInator.js</h2>
     
     <pre>
-        
-(function (<strong>$, quoteLookup</strong>) {
+(function (laser, inator) {
 
     /* 
-      A 
-      whole 
-      lotta
-      stuff
+      In reality,
+      it takes 
+      a minimum of
+      62 lines of code
+      to make a 
+      half-decent
+      spacelaserinator. 
     */
     
-})(<strong>jQuery, CLTS.quoteLookupFromYQL</strong>);
+})(jQuery, CLTJS.frickinLaser);
         
         
     </pre>  
+
+    <p class="slide">Don't you hate it when he just reads the slide?</p>
 </section>
 
 
 <section class="slide" id="define-introduction">
-<h2><del>II</del>FE</h2>
+<h2>spaceLaserInator.js</h2>
 
 <pre>
-define( [jQuery, CLTJS.YqlStockQuoteFinder], 
-    function ($, stockQuoteFinder) {
-    ...
+define( <strong>[CLTJS.frickinLaser, jQuery]</strong>, 
+    function (<strong>laser, inator</strong>) {
+        ...
+        CLTJS.spaceLaserInator = ...;
     }
 );
 
@@ -296,13 +325,13 @@ var define = function(dependencies, callback) {
 </pre>
 
 
-<p>
+<!-- <p>
     Now dependencies are declared at the top. 
    <ul>
        <li>Looks an awful lot like require from Ruby</li>
        <li>or import from Java.</li>    
     </ul>
-</p>
+</p> -->
 </section>
 
 
@@ -326,39 +355,92 @@ var define = function(dependencies, callback) {
     
     
 <pre>
-    define('moduleC', ['moduleA', 'moduleB'], function (a, b) {
-            
-            var thisModule = {}; 
-            
-            ...
-            thisModule.doSomethingWith(a);
-            thisModule.doSomethingWith(b);
-            ...
-            
-            return thisModule;
-        }
-    );
-</pre>
-    
-<pre>
-define('pickColor', ['constants', 'hsvToRgb'], function (constants, hsvToRgb) {
-        
-        return function (n) {
-            var hue = n * constants.phi - floor(n * constants.phi);
-            return hsvToRgb(hue, 0.5, 0.95);
-        };
+define('spaceLaserInator', ['frickinLaser', 'cltjs/inator'], function (laser, inator) {
+        ...
+        return inator.with(laser);
     }
 );
 </pre>
 
+
+
+
+</section>
+
+
+<section class="slide">
+<h2>Pick-A-Colorinator</h2>
+    
+        
+<pre>
+define('pickColor', ['constants', 'hsvToRgb'], function (constants, hsvToRgb) {
+        
+        return function (n) {
+            var hue = n * constants.phi % 1;
+            return hsvToRgb(hue, 0.5, 0.95);
+        };
+        
+    }
+);
+</pre>
+
+<pre>
+define('constants', [], function () {
+
+    return {
+        phi = (1 + Math.sqrt(5)) / 2,
+        e = 2.71828183,
+        pi = 3.14159265
+    };
+
+})
+    
+</pre>
+
+
+<pre>
+define('hsvToRgb', [], function () {
+
+    /* (c) 2008 Michael Jackson */
+    return function (h, s, v) {
+    
+        var r, g, b;
+        var i = Math.floor(h * 6);
+        var f = h * 6 - i;
+        var p = v * (1 - s);
+        var q = v * (1 - f * s);
+        var t = v * (1 - (1 - f) * s);
+
+        switch(i % 6){
+            case 0: r = v, g = t, b = p; break;
+            case 1: r = q, g = v, b = p; break;
+            case 2: r = p, g = v, b = t; break;
+            case 3: r = p, g = q, b = v; break;
+            case 4: r = t, g = p, b = v; break;
+            case 5: r = v, g = p, b = q; break;
+        }
+
+        return [r * 255, g * 255, b * 255];
+    }
+
+})    
+    
+</pre>
+
+<ul>
+    <li><a target="_blank" href="http://mjijackson.com/2008/02/rgb-to-hsl-and-rgb-to-hsv-color-model-conversion-algorithms-in-javascript" title="mjijackson &raquo; RGB to HSL and RGB to HSV Color Model Conversion Algorithms in JavaScript">http://mjijackson.com/2008/02/rgb-to-hsl-and-rgb-to-hsv-color-model-conversion-algorithms-in-javascript
+</a></li>
+    <li><a target="_blank" href="http://stackoverflow.com/a/1168328/437" title="My Answer to Algorithm For Generating Unique Colors - Stack Overflow">Stack Overflow: Algorithm for Generating Unique Colors</a></li>
+</ul>
+</p>
 </section>
 
 
 <section class="slide" id="optional-1">
-    <h2>Optional Parameter is Optional</h2>
+    <h2>Optional Argument is Optional</h2>
 
     <pre>
-define('myModule', ['depencyA', 'dependencyB'], function (a, b) {
+define('myModule', ['dependencyA', 'dependencyB'], function (a, b) {
     /* do stuff */
     return theModule;
 });
@@ -370,7 +452,7 @@ define('myModule', ['depencyA', 'dependencyB'], function (a, b) {
     <h2>Name is Optional</h2>
 
     <pre>
-define(['depencyA', 'dependencyB'], function (a, b) {
+define(['dependencyA', 'dependencyB'], function (a, b) {
     /* do stuff */
     return theModule;
 });
@@ -411,6 +493,19 @@ define(function () {
     </pre>
 </section>
 
+<section class="slide" id="optional-4">
+    <h2>Shortcut for Returning an Object</h2>
+
+<pre>
+define('constants', {
+    phi = (1 + Math.sqrt(5)) / 2,        
+    e = 2.71828183,
+    pi = 3.14159265
+});
+</pre>
+</section>
+
+
 
 <section class="slide" id="define-signature">
     <h2>Signature</h2>
@@ -448,7 +543,7 @@ define(function () {
 
 <section class="slide" id="loaders">
     
-    <h2>Loading with RequireJS</h2>
+<h2>Loading with RequireJS</h2>
     
 <pre class="slide">
     require('./my-app/main-module');
@@ -470,6 +565,24 @@ define(function () {
         <strong>data-main="my-app-main-module"</strong>
     &gt;&lt;/script&gt;
 </pre>
+
+
+<pre class="slide">
+    &lt;script type="text/javascript"&gt;
+        require = {
+            urlArgs: "bust=" +  (new Date()).getTime(), 
+            baseUrl: '/path/to/my/app',
+            ...
+        }
+    &lt;/script&gt;
+
+    &lt;script 
+        type="text/javascript" 
+        src="scripts/require.js"
+        data-main="my-app-main-module"
+    &gt;&lt;/script&gt;
+</pre>
+
 
 </section>
 
