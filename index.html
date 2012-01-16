@@ -115,24 +115,39 @@ module does this...
 
 
 <section class="slide">
-    <h2>3 Problems</h2>
-    <p>(2012 calendar)</p>
+    <h2>Three Problems</h2>
+    <p>
+        <img src="images/2012-calendar.png" width="600" height="600" alt="2012 Calendar">
+    </p>
 </section>
 
 <section class="slide">
-    <h2>1. Stop Polluting the Global Namespace</h2>
-    <p>(Al Gore)</p>
+    <h2>Stop Polluting the Global Namespace</h2>
+    <p>
+        <a target="_blank" href="http://ecoandrew.blogspot.com/2011_06_01_archive.html" title="The Rational Conservationist: June 2011"><img src="images/algore-pointing.jpg" width="800" height="538" alt="Al Gore"></a>
+    </p>
 </section>
 
 <section class="slide">
-    <h2>2. Reduce, Reuse, Recycle</h2>
-    <p>(Recycle symbol, Megablock, cognitive load, SRP, REP, savings calculator, legos?)</p>
+    <h2>Reduce, Reuse</h2>
+    <p>
+        <img src="images/recycle.png" width="600" height="600" alt="Recycle">
+    </p>
+</section>
+
+<section class="slide" id="microjs">
+    <h2>More of this</h2>
+    <p>
+        <img src="images/microjs-screenshot.png" width="1014" height="800" alt="Microjs Screenshot">
+    </p>
 </section>
 
 
 <section class="slide">
-    <h2>3. Respect the (Browser) Environment</h2>
-    <p>(img of lots of script tags)</p>
+    <h2>Respect the (Browser) Environment</h2>
+    <p>
+        <img src="images/script-tags.png" width="754" height="559" alt="Script Tags">
+    </p>
 </section>
 
 
@@ -196,7 +211,7 @@ module does this...
     var wavelength = 132, color = "#00f";
     ...
     
-    <strong>window.spaceLaserInator = { ... };</strong>
+    <strong>window.spaceLaserinator = { ... };</strong>
 })();
     </pre>  
 
@@ -224,7 +239,7 @@ module does this...
 
 
 <section class="slide" id="iife-with-different-dependency-name">
-    <h2>spaceLaserInator.js</h2>
+    <h2>spaceLaserinator.js</h2>
 <pre>
 (function () {
     
@@ -242,7 +257,7 @@ module does this...
 
 
 <section class="slide" id="iife-arguments">
-    <h2>spaceLaserInator.js</h2>
+    <h2>spaceLaserinator.js</h2>
     
     <pre>
 (function (<strong>laser, inator</strong>) {
@@ -250,7 +265,7 @@ module does this...
     ...
     inator.attach('&lt;button&gt;');
     laser.pointAt(window);
-    CLTJS.spaceLaserInator = inator.with(laser);
+    CLTJS.spaceLaserinator = inator.with(laser);
 
 })(<strong>CLTJS.laser, CLTJS.inator</strong>);
         
@@ -267,9 +282,9 @@ module does this...
     ...
     inator.attach('&lt;button&gt;');
     laser.pointAt(window);
-    CLTJS.spaceLaserInator = inator.with(laser);
+    CLTJS.spaceLaserinator = inator.with(laser);
         
-})(CLTJS.<strong>frickinLaser</strong>, CLTJS.inator);
+})(CLTJS.<strong>frickinLaserBeam</strong>, CLTJS.inator);
         
         
     </pre>  
@@ -287,7 +302,7 @@ module does this...
     laser.pointAt(window);
     CLTJS.spaceLaserInator = inator.with(laser);
         
-})(CLTJS.frickinLaser, <strong>jQuery</strong>);
+})(CLTJS.frickinLaserBeam, <strong>jQuery</strong>);
         
         
     </pre>  
@@ -310,7 +325,7 @@ module does this...
       spacelaserinator. 
     */
     
-})(jQuery, CLTJS.frickinLaser);
+})(jQuery, CLTJS.frickinLaserBeam);
         
         
     </pre>  
@@ -323,7 +338,7 @@ module does this...
 <h2>spaceLaserInator.js</h2>
 
 <pre>
-define( <strong>[CLTJS.frickinLaser, jQuery]</strong>, 
+define( <strong>[CLTJS.frickinLaserBeam, jQuery]</strong>, 
     function (<strong>laser, inator</strong>) {
         ...
         CLTJS.spaceLaserInator = ...;
@@ -371,7 +386,7 @@ var define = function(dependencies, callback) {
     
     
 <pre>
-define('spaceLaserInator', ['frickinLaser', 'cltjs/inator'], function (laser, inator) {
+define('spaceLaserInator', ['frickinLaserBeam', 'cltjs/inator'], function (laser, inator) {
         ...
         return inator.with(laser);
     }
@@ -453,9 +468,9 @@ define('hsvToRgb', [], function () {
 
 
 <section class="slide" id="optional-1">
-    <h2>Optional Argument is Optional</h2>
+<h2>Optional Arguments are Optional</h2>
 
-    <pre>
+<pre>
 define('myModule', ['dependencyA', 'dependencyB'], function (a, b) {
     /* do stuff */
     return theModule;
@@ -510,13 +525,12 @@ define(function () {
 </section>
 
 <section class="slide" id="optional-4">
-    <h2>Shortcut for Returning an Object</h2>
+    <h2>Shortcut for Modules that are Objects</h2>
 
 <pre>
-define('constants', {
-    phi = (1 + Math.sqrt(5)) / 2,        
-    e = 2.71828183,
-    pi = 3.14159265
+define({
+    splines: [12, 45, 19],
+    reticulate: function () { ... }
 });
 </pre>
 </section>
@@ -613,11 +627,11 @@ $ npm install require.js
 </pre>
 
 <pre class="slide">
-$ r.js /path/to/main.js    
+$ node /path/to/r.js /path/to/main.js    
 </pre>
 
 <pre class="slide">
-$ r.js -o <a href="https://github.com/jrburke/r.js/blob/master/build/example.build.js" target="_blank">build.js</a>    
+$ node /path/to/r.js -o <a href="https://github.com/jrburke/r.js/blob/master/build/example.build.js" target="_blank">build.js</a>    
 </pre>
 
 </section>
@@ -628,9 +642,9 @@ $ r.js -o <a href="https://github.com/jrburke/r.js/blob/master/build/example.bui
     <h2>Almond</h2>
     
     <ul>
-        <li class="slide">concatenated files</li>
-        <li class="slide">production</li>    
-        <li class="slide">857 bytes</li>
+        <li>loads concatenated modules</li>
+        <li>use it in production</li>
+        <li>857 bytes (minified &amp; gzipped)</li>
     </ul>
 
 </section>
@@ -651,10 +665,11 @@ $ r.js -o <a href="https://github.com/jrburke/r.js/blob/master/build/example.bui
     <h2>Who's Using AMD?</h2>
     
     <ul>
-        <li>Plugins on wiki</li>
-        <li>Dojo collection</li>
-        <li>Miller's collection</li>
-        <li>jQuery, underscore, etc.</li>
+        <li><a href="http://dojotoolkit.org/features/1.6/async-modules" title="Asynchronous Modules Come to Dojo 1.6 - The Dojo Toolkit" target="_blank">Dojo 1.6</a></li>
+        <li><a href="http://blog.jquery.com/2011/11/03/jquery-1-7-released/" title="jQuery 1.7 Released" target="_blank">jQuery 1.7</a></li>
+        <li><a href="http://getfirebug.com/wiki/index.php/Firebug_1.8_API_Changes" title="Firebug Modules - FirebugWiki" target="_blank">Firebug 1.8</a></li>
+        <li><a href="http://groups.google.com/group/requirejs/browse_thread/thread/68a039882a6ede42" target="_blank">MooTools</a></li>
+        <li>Miller Medeiros's <a href="https://github.com/millermedeiros/amd-utils" target="_blank">amd-utils</a> on Github</li>
     </ul>
 
 </section>
@@ -668,19 +683,19 @@ $ r.js -o <a href="https://github.com/jrburke/r.js/blob/master/build/example.bui
     
     <h3>Me</h3>
     <ul>
-        <li>PatrickMcElhaney.com</li>
-        <li>@patrick_mc</li>
-        <li>http://github.com/pmcelhaney</li>
-        <li>http://ux.stackexchange.com/</li>
+        <li><a href="http://patrickmcelhaney.com">PatrickMcElhaney.com</a></li>
+        <li><a href="http://twitter.com/patrick_mc" target="_blank">@patrick_mc</a></li>
+        <li><a href="http://github.com/pmcelhaney">http://github.com/pmcelhaney</a></li>
+        <li><a href="http://ux.stackexchange.com/users/61/patrick-mcelhaney" title="UX Stack Exchange: Patrick McElhaney">http://ux.stackexchange.com/</a></li>
     </ul>
     
     <h3>AMD</h3>
     <ul>
         <!-- I should put avatars here -->
-        <li>http://<strong>requirejs.org</strong>/docs/whyamd.html</li>
-        <li>James Burke - @jrburke</li> 
-        <li>Jonn Hann - @unscriptable (curl.js)</li>
-        <li>https://groups.google.com/group/<strong>amd-implement</strong></li>
+        <li><a href="http://requirejs.org/docs/whyamd.html" title="Why AMD?" target="_blank">http://requirejs.org/docs/whyamd.html</a></li>
+        <li>James Burke - <a href="http://twitter.com/jrburke" target="_blank">@jrburke</a> (RequireJS, r.js, Almond)</li> 
+        <li>Jonn Hann - <a href="http://twitter.com/unscriptable" target="_blank">@unscriptable</a> (curl.js)</li>
+        <li><a href="https://groups.google.com/group/amd-implement" target="_blank">https://groups.google.com/group/amd-implement</a></li>
     </ul>
 </section>
 

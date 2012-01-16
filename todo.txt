@@ -1,11 +1,7 @@
-Find pictures for the first slides
 Slide for savings calculator (11 or 12?) - SRP
 Real examples (for repetition)
-Make a full example with the color pickerinator (and roman calculator)
-List of who's using AMD with links
+roman calculator
 Grab bag slide (localization, excludes, contexts, etc.)
-Learn to use a couple of plugins
 Make a slide for the plugins
-Add plugins to the example projects
 Write out notes on notecards
 Notepad / Netscape slide
