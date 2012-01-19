@@ -144,7 +144,7 @@ module does this...
 
 
 <section class="slide">
-    <h2>Respect the (Browser) Environment</h2>
+    <h2>Clean Up the (Browser) Environment</h2>
     <p>
         <img src="images/script-tags.png" width="754" height="559" alt="Script Tags">
     </p>
@@ -179,7 +179,7 @@ module does this...
     };
     
     var human = function () {
-        console.log(Kristen " + name);
+        console.log("Kristen " + name);
     };
 </pre>
 
@@ -193,8 +193,9 @@ module does this...
 
     <pre>
 <strong>(function () {</strong>
-    var a = "foo", b = "bar";
+    var wavelength = 132, color = "#00f";
     ...
+
 
 <strong>})();</strong>
     </pre>
@@ -220,9 +221,9 @@ module does this...
 
 
 <section class="slide" id="iife-with-namespace">
-    <h2>IIFE</h2>
+<h2>"Namespaces"</h2>
     
-    <h3>Immediately Invoked Function Expression</h3>
+
     
 <pre>
 <strong>CLTJS = window.CLTJS || {};  </strong>  
@@ -231,7 +232,7 @@ module does this...
     var wavelength = 132, color = "#00f";
     ...
 
-    <strong>CLTJS</strong>.spaceLaserInator = ... ;
+    <strong>CLTJS</strong>.spaceLaserinator = ... ;
 })();
 </pre>
 
@@ -249,7 +250,7 @@ module does this...
     ...
     <strong>inator</strong>.attach('&lt;button&gt;');
     <strong>laser</strong>.pointAt(window);
-    CLTJS.spaceLaserInator = <strong>inator</strong>.with(<strong>laser</strong>);
+    CLTJS.spaceLaserinator = <strong>inator</strong>.with(<strong>laser</strong>);
 })();
 </pre>
 
@@ -274,7 +275,7 @@ module does this...
 </section>
 
 <section class="slide" id="frickin-laser">
-    <h2>spaceLaserInator.js</h2>
+    <h2>spaceLaserinator.js</h2>
     
     <pre>
 (function (laser, inator) {
@@ -292,7 +293,7 @@ module does this...
 
 
 <section class="slide" id="frickin-jQuery">
-    <h2>spaceLaserInator.js</h2>
+    <h2>spaceLaserinator.js</h2>
     
     <pre>
 (function (laser, inator) {
@@ -300,7 +301,7 @@ module does this...
     ...
     inator.attach('&lt;button&gt;');
     laser.pointAt(window);
-    CLTJS.spaceLaserInator = inator.with(laser);
+    CLTJS.spaceLaserinator = inator.with(laser);
         
 })(CLTJS.frickinLaserBeam, <strong>jQuery</strong>);
         
@@ -310,7 +311,7 @@ module does this...
 
 
 <section class="slide" id="iife-arguments-3">
-    <h2>spaceLaserInator.js</h2>
+    <h2>spaceLaserinator.js</h2>
     
     <pre>
 (function (laser, inator) {
@@ -322,7 +323,7 @@ module does this...
       62 lines of code
       to make a 
       half-decent
-      spacelaserinator. 
+      space laserinator. 
     */
     
 })(jQuery, CLTJS.frickinLaserBeam);
@@ -330,12 +331,11 @@ module does this...
         
     </pre>  
 
-    <p class="slide">Don't you hate it when he just reads the slide?</p>
 </section>
 
 
 <section class="slide" id="define-introduction">
-<h2>spaceLaserInator.js</h2>
+<h2>spaceLaserinator.js</h2>
 
 <pre>
 define( <strong>[CLTJS.frickinLaserBeam, jQuery]</strong>, 
@@ -366,9 +366,7 @@ var define = function(dependencies, callback) {
 </section>
 
 
-<section class="slide">
-
-<pre>    
+<!-- 
     What if we expand this define function to automatically "import" the required scripts?
     1. Instead of a reference to module (it doesn't exist yet), we specify its name.
        define(['jQuery', 'YqlStockQuoteFinder'], ...)
@@ -376,17 +374,17 @@ var define = function(dependencies, callback) {
        define('myModule', ...)
     3. Each module defines one object.
        return { ... }
-</pre>    
+-->    
     
-</section>
+
 
 
 <section class="slide">
-    <h2>Define: The &lt;3 of AMD</h2>
+    <h2>spaceLaserinator.js, AMD-style</h2>
     
     
 <pre>
-define('spaceLaserInator', ['frickinLaserBeam', 'cltjs/inator'], function (laser, inator) {
+define('spaceLaserInator', ['frickinLaserBeam', 'inator'], function (laser, inator) {
         ...
         return inator.with(laser);
     }
@@ -545,31 +543,67 @@ define({
 </section>
 
 
-<section class="slide" id="example-object">
+<section class="slide" id="example-1">
 
-<pre>real example that returns an object</pre>
+<h2>Example: compoundInterest.js</h2>
+<pre>
+define(function () {
 
-</section>
+    /**
+     * Basic compound interest
+     * @author Miller Medeiros
+     * @version 0.1.0 (2011/12/30)
+     */
+    function compoundInterest(presentValue, interestRate, nPeriods) {
+        return presentValue * Math.pow(1 + interestRate, nPeriods);
+    }
 
-<section class="slide" id="example-array">
+    return compoundInterest;
 
-    <pre>real example that returns an array</pre>
-
-</section>
-
-<section class="slide" id="example-function">
-
-    <pre>real example that returns a function</pre>
-
-</section>
-
-<section class="slide" id="example-string">
-
-    <pre>real example that returns a string</pre>
+});
+</pre>
 
 </section>
 
+<section class="slide" id="example-randInt">
+    
+<h2>Example: randInt.js</h2>
 
+<pre>
+define(['../number/MIN_INT', '../number/MAX_INT', '../number/toInt', './rand'], function(MIN_INT, MAX_INT, toInt, rand){
+
+    /**
+     * Gets random integer inside range or snap to min/max values.
+     * @version 0.5.0 (2011/11/17)
+     * @author Miller Medeiros / Fabio Caccamo
+     */
+    function randInt(min, max){
+        min = min == null? MIN_INT : toInt(min);
+        max = max == null? MAX_INT : toInt(max);
+        // can't be max + 0.5 otherwise it will round up if `rand`
+        // returns `max` causing it to overflow range.
+        // -0.5 and + 0.49 are required to avoid bias caused by rounding
+        return Math.round( rand(min - 0.5, max + 0.499999999999) );
+    }
+
+    return randInt;
+});
+</pre>
+</section>
+
+<section class="slide" id="example-MAX_INT">
+    
+<h2>Example: MAX_INT.js</h2>
+
+<pre>
+/**
+ * @constant Maximum 32-bit signed integer value. (2^31 - 1)
+ * @version 0.1.0 (2011/10/21)
+ * @author Miller Medeiros
+ */
+define(2147483647);
+</pre>
+</section>
 
 <section class="slide" id="loaders">
     
@@ -592,7 +626,7 @@ define({
     &lt;script 
         type="text/javascript" 
         src="scripts/require.js"
-        <strong>data-main="my-app-main-module"</strong>
+        <strong>data-main="main-module-name"</strong>
     &gt;&lt;/script&gt;
 </pre>
 
@@ -609,7 +643,7 @@ define({
     &lt;script 
         type="text/javascript" 
         src="scripts/require.js"
-        data-main="my-app-main-module"
+        data-main="main-module-name"
     &gt;&lt;/script&gt;
 </pre>
 
@@ -647,31 +681,87 @@ $ node /path/to/r.js -o <a href="https://github.com/jrburke/r.js/blob/master/bui
         <li>857 bytes (minified &amp; gzipped)</li>
     </ul>
 
+<pre class="slide">
+$ node r.js -o baseUrl=. name=path/to/almond.js include=main out=main-built.js wrap=true    
+</pre>    
+
+<pre class="slide">
+function () {
+    
+    // Almond
+    var define = function (...) { ... };
+    
+    define('main', ['dep1', 'dep2'], function(dep1, dep2) { ... };
+    define('dep1', function() { ... };
+    define('dep2', ['dep2a'], function(dep2a) { ... };
+    define('dep2a', function() { ... };
+    
+}(); // Look ma, no globals! 
+</pre>    
+
 </section>
 
 
 <section class="slide" id="plugins">
-    <h2>Plugins!</h2>
+<h2>Plugins!</h2>
+
+<pre>
+define(['lib/mustache', '<strong>text!</strong>path/to/template.html', '<strong>json!</strong>some/data.json'], 
+    function (mustache, view, data) {
+        console.log(mustache.render(data, view)); 
+    }
+);
+    
+</pre>
+
+
+<pre class="slide">
+define(['<strong>order!</strong>love', '<strong>order!</strong>marriage', '<strong>order!</strong>baby/carriage'], 
+    function (okcupid, bridesmaids, maclaren) {
+        ...
+    }
+);
+    
+</pre>
+   
+   
+<div class="slide">
+<h3>A plugin is just a module</h3>    
+<pre>
+define(['<strong>path/to/a/plugin!</strong>path/to/a/module', '<strong>domReady!</strong>'], 
+    function (module) {
+        ...
+    }
+);
+</pre>    
+</div>    
     
 </section>
 
 
 <section class="slide" id="node">
-    <h2>Node</h2>
+<h2>Node</h2>
     
 </section>
 
 <section class="slide" id="libraries">
-    <h2>Who's Using AMD?</h2>
+<h2>Who's Using AMD?</h2>
     
-    <ul>
-        <li><a href="http://dojotoolkit.org/features/1.6/async-modules" title="Asynchronous Modules Come to Dojo 1.6 - The Dojo Toolkit" target="_blank">Dojo 1.6</a></li>
-        <li><a href="http://blog.jquery.com/2011/11/03/jquery-1-7-released/" title="jQuery 1.7 Released" target="_blank">jQuery 1.7</a></li>
-        <li><a href="http://getfirebug.com/wiki/index.php/Firebug_1.8_API_Changes" title="Firebug Modules - FirebugWiki" target="_blank">Firebug 1.8</a></li>
-        <li><a href="http://groups.google.com/group/requirejs/browse_thread/thread/68a039882a6ede42" target="_blank">MooTools</a></li>
-        <li>Miller Medeiros's <a href="https://github.com/millermedeiros/amd-utils" target="_blank">amd-utils</a> on Github</li>
-    </ul>
 
+    
+<ul>
+    <li><a href="http://dojotoolkit.org/features/1.6/async-modules" title="Asynchronous Modules Come to Dojo 1.6 - The Dojo Toolkit" target="_blank">Dojo 1.6</a></li>
+    <li><a href="http://blog.jquery.com/2011/11/03/jquery-1-7-released/" title="jQuery 1.7 Released" target="_blank">jQuery 1.7</a></li>
+    <li><a href="http://groups.google.com/group/requirejs/browse_thread/thread/68a039882a6ede42" target="_blank">MooTools</a></li>
+    <li>Miller Medeiros's <a href="https://github.com/millermedeiros/amd-utils" target="_blank">amd-utils</a> on Github</li>
+</ul>
+
+<ul>
+    <li><a href="http://getfirebug.com/wiki/index.php/Firebug_1.8_API_Changes" title="Firebug Modules - FirebugWiki" target="_blank">Firebug 1.8</a></li>
+    <li><a href="http://www.bbc.co.uk/iplayer/radio" title="BBC iPlayer - iPlayer Radio Home">BBC iPlayer</a></li>
+    <li><a href="http://disney.go.com/create/" title="Create | Add popular Characters to online drawings | Disney">Disney Create</a></li>
+    <li>Some domain registrar that supported SOPA</li>
+</ul>
 </section>
 
 
@@ -687,6 +777,7 @@ $ node /path/to/r.js -o <a href="https://github.com/jrburke/r.js/blob/master/bui
         <li><a href="http://twitter.com/patrick_mc" target="_blank">@patrick_mc</a></li>
         <li><a href="http://github.com/pmcelhaney">http://github.com/pmcelhaney</a></li>
         <li><a href="http://ux.stackexchange.com/users/61/patrick-mcelhaney" title="UX Stack Exchange: Patrick McElhaney">http://ux.stackexchange.com/</a></li>
+        <li><a href="http://www.ally.com">Ally</a></li>
     </ul>
     
     <h3>AMD</h3>

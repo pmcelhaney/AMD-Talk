@@ -67,3 +67,7 @@
 h2 { 
     text-align: center;
 }
+
+.csstransitions.csstransforms .deck-container:not(.deck-menu) > .slide .deck-previous {
+  opacity: 1;
+}
