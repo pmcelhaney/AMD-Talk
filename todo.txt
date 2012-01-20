@@ -1,7 +1,0 @@
-Slide for savings calculator (11 or 12?) - SRP
-Real examples (for repetition)
-roman calculator
-Grab bag slide (localization, excludes, contexts, etc.)
-Make a slide for the plugins
-Write out notes on notecards
-Notepad / Netscape slide
