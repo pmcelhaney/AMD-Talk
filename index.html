@@ -1,0 +1,838 @@
+<!--
+Review: Why IIFEs (Show how scoped variables work)
+An IIFE that adds to the host object (window.myModule)
+And IIFE that adds to a custom namespace (CLTJS.myModule)
+-> Problem: Collisions are still possible
+-> Problem: Tight coupling. Can't swap to a different module
+Solution: 
+  (function (module1, module2) { ... }(CLTS.module1, CTLJS.module2)}
+  (function (module1, module2) { ... }(CLTS.moduleX, CTLJS.moduleY)}
+  (function ($, stockQuoteFinder) { ... }(jQuery, CLTS.YqlStockQuoteFinder)) // make it concrete
+-> Problem: Now you have local names a the top and global names at the bottom
+Solution:
+   define([jQuery, CLTJS.YqlStockQuoteFinder], function ($, stockQuoteFinder) {
+    ...
+   });
+   
+   function define(dependencies, iife) {
+        iife.call(dependencies);
+   }
+   
+Now dependencies are declared at the top. 
+... Looks an awful lot like require from Ruby
+... or import from Java.
+   
+What if we expand this define function to automatically "import" the required scripts?
+1. Instead of a reference to module (it doesn't exist yet), we specify its name.
+   define(['jQuery', 'YqlStockQuoteFinder'], ...)
+2. Each module has to have a name.
+   define('myModule', ...)
+3. Each module defines one object.
+   return { ... }
+   
+This is what AMD looks like.
+
+A concrete example.
+
+Back to abstract example. 
+- The name is optional. 
+- The dependencies are also optional
+- return is also optional
+
+The basic form of AMD:
+define(name?, dependencies?, definitionFunction)
+
+Real example that returns an object
+Real example that returns an array
+Real example that returns a function
+Real example that returns a string
+
+* * * * 
+
+Concatenation with r.js
+
+Using almond shim in production
+
+
+* * * *
+
+Plugins!
+
+require, exports, module
+
+require does this...
+exports does this...
+module does this...
+
+
+   
+   
+  
+
+
+-->
+
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->  <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Asynchronous Module Definitions</title>
+    
+    <meta name="viewport" content="width=1024, user-scalable=no">
+    
+    <!-- Core and extension CSS files -->
+    <link rel="stylesheet" href="deckjs/core/deck.core.css">
+    <link rel="stylesheet" href="deckjs/extensions/goto/deck.goto.css">
+    <link rel="stylesheet" href="deckjs/extensions/menu/deck.menu.css">
+    <link rel="stylesheet" href="deckjs/extensions/navigation/deck.navigation.css">
+    <link rel="stylesheet" href="deckjs/extensions/status/deck.status.css">
+    <link rel="stylesheet" href="deckjs/extensions/hash/deck.hash.css">
+    
+    
+    <!-- Theme CSS files (menu swaps these out) -->
+    <link rel="stylesheet" id="style-theme-link" href="deckjs/themes/style/web-2.0.css">
+    <link rel="stylesheet" id="transition-theme-link" href="deckjs/themes/transition/fade.css">
+    
+    <!-- Custom CSS just for this page -->
+    <link rel="stylesheet" href="amd.css">
+    
+    <script src="deckjs/modernizr.custom.js"></script>
+
+    
+</head>
+
+<body class="deck-container">
+
+
+<section class="slide" id="title-slide">
+    <h1>Asynchronous Module Definition (AMD)</h1>
+</section>
+
+
+<section class="slide">
+    <h2>Three Problems</h2>
+    <p>
+        <img src="images/2012-calendar.png" width="600" height="600" alt="2012 Calendar">
+    </p>
+</section>
+
+<section class="slide">
+    <h2>Stop Polluting the Global Namespace</h2>
+    <p>
+        <a target="_blank" href="http://ecoandrew.blogspot.com/2011_06_01_archive.html" title="The Rational Conservationist: June 2011"><img src="images/algore-pointing.jpg" width="800" height="538" alt="Al Gore"></a>
+    </p>
+</section>
+
+<section class="slide">
+    <h2>Reduce, Reuse</h2>
+    <p>
+        <img src="images/recycle.png" width="600" height="600" alt="Recycle">
+    </p>
+</section>
+
+<section class="slide" id="microjs">
+    <h2>More of this</h2>
+    <p>
+        <img src="images/microjs-screenshot.png" width="1014" height="800" alt="Microjs Screenshot">
+    </p>
+</section>
+
+
+<section class="slide">
+    <h2>Clean Up the (Browser) Environment</h2>
+    <p>
+        <img src="images/script-tags.png" width="754" height="559" alt="Script Tags">
+    </p>
+</section>
+
+
+<section class="slide" id="tools">
+    <h2>Tools</h2>
+    
+    <ul>
+        <li><img src="images/TextMate.png" width="256" height="256" alt="TextMate"></li>
+        <li><img src="images/chrome-logo.png" width="256" height="256" alt="Google Chrome"></li>
+    </ul>
+</section>
+
+
+<section class="slide">
+<h2>Scopes</h2>
+
+<pre>
+    
+    var name = "Stewart";
+    
+    var vampire = function () {
+        var name = "Pattinson";
+        console.log("Robert " + name);
+    };
+    
+    var wolf = function () {
+        var name = "Lautner";
+        console.log("Taylor " + name);
+    };
+    
+    var human = function () {
+        console.log("Kristen " + name);
+    };
+</pre>
+
+</section>
+
+
+<section class="slide" id="iife-review">
+    <h2>IIFE</h2>
+
+    <h3>Immediately Invoked Function Expression</h3>
+
+    <pre>
+<strong>(function () {</strong>
+    var wavelength = 132, color = "#00f";
+    ...
+
+
+<strong>})();</strong>
+    </pre>
+
+</section>
+
+<section class="slide" id="iife-with-global">
+    <h2>IIFE</h2>
+    
+    <h3>Immediately Invoked Function Expression</h3>
+    
+    <pre>
+(function () {
+    var wavelength = 132, color = "#00f";
+    ...
+    
+    <strong>window.spaceLaserinator = { ... };</strong>
+})();
+    </pre>  
+
+</section>
+
+
+
+<section class="slide" id="iife-with-namespace">
+<h2>"Namespaces"</h2>
+    
+
+    
+<pre>
+<strong>CLTJS = window.CLTJS || {};  </strong>  
+    
+(function () {
+    var wavelength = 132, color = "#00f";
+    ...
+
+    <strong>CLTJS</strong>.spaceLaserinator = ... ;
+})();
+</pre>
+
+</section>
+
+
+<section class="slide" id="iife-with-different-dependency-name">
+    <h2>spaceLaserinator.js</h2>
+<pre>
+(function () {
+    
+    var <strong>laser</strong> = <strong>CLTJS.laser</strong>;
+    var <strong>inator</strong> = <strong>CTLJS.inator</strong>;
+    
+    ...
+    <strong>inator</strong>.attach('&lt;button&gt;');
+    <strong>laser</strong>.pointAt(window);
+    CLTJS.spaceLaserinator = <strong>inator</strong>.with(<strong>laser</strong>);
+})();
+</pre>
+
+</section>
+
+
+<section class="slide" id="iife-arguments">
+    <h2>spaceLaserinator.js</h2>
+    
+    <pre>
+(function (<strong>laser, inator</strong>) {
+    
+    ...
+    inator.attach('&lt;button&gt;');
+    laser.pointAt(window);
+    CLTJS.spaceLaserinator = inator.with(laser);
+
+})(<strong>CLTJS.laser, CLTJS.inator</strong>);
+        
+        
+    </pre>  
+</section>
+
+<section class="slide" id="frickin-laser">
+    <h2>spaceLaserinator.js</h2>
+    
+    <pre>
+(function (laser, inator) {
+    
+    ...
+    inator.attach('&lt;button&gt;');
+    laser.pointAt(window);
+    CLTJS.spaceLaserinator = inator.with(laser);
+        
+})(CLTJS.<strong>frickinLaserBeam</strong>, CLTJS.inator);
+        
+        
+    </pre>  
+</section>
+
+
+<section class="slide" id="frickin-jQuery">
+    <h2>spaceLaserinator.js</h2>
+    
+    <pre>
+(function (laser, inator) {
+    
+    ...
+    inator.attach('&lt;button&gt;');
+    laser.pointAt(window);
+    CLTJS.spaceLaserinator = inator.with(laser);
+        
+})(CLTJS.frickinLaserBeam, <strong>jQuery</strong>);
+        
+        
+    </pre>  
+</section>
+
+
+<section class="slide" id="iife-arguments-3">
+    <h2>spaceLaserinator.js</h2>
+    
+    <pre>
+(function (laser, inator) {
+
+    /* 
+      In reality,
+      it takes 
+      a minimum of
+      62 lines of code
+      to make a 
+      half-decent
+      space laserinator. 
+    */
+    
+})(jQuery, CLTJS.frickinLaserBeam);
+        
+        
+    </pre>  
+
+</section>
+
+
+<section class="slide" id="define-introduction">
+<h2>spaceLaserinator.js</h2>
+
+<pre>
+define( <strong>[CLTJS.frickinLaserBeam, jQuery]</strong>, 
+    function (<strong>laser, inator</strong>) {
+        ...
+        CLTJS.spaceLaserInator = ...;
+    }
+);
+
+</pre>
+
+
+
+<pre class="slide">
+var define = function(dependencies, callback) {
+     callback.apply(dependencies);
+};    
+</pre>
+
+
+<!-- <p>
+    Now dependencies are declared at the top. 
+   <ul>
+       <li>Looks an awful lot like require from Ruby</li>
+       <li>or import from Java.</li>    
+    </ul>
+</p> -->
+</section>
+
+
+<!-- 
+    What if we expand this define function to automatically "import" the required scripts?
+    1. Instead of a reference to module (it doesn't exist yet), we specify its name.
+       define(['jQuery', 'YqlStockQuoteFinder'], ...)
+    2. Each module has to have a name.
+       define('myModule', ...)
+    3. Each module defines one object.
+       return { ... }
+-->    
+    
+
+
+
+<section class="slide">
+    <h2>spaceLaserinator.js, AMD-style</h2>
+    
+    
+<pre>
+define('spaceLaserInator', ['frickinLaserBeam', 'inator'], function (laser, inator) {
+        ...
+        return inator.with(laser);
+    }
+);
+</pre>
+
+
+
+
+</section>
+
+
+<section class="slide">
+<h2>Pick-A-Colorinator</h2>
+    
+        
+<pre>
+define('pickColor', ['constants', 'hsvToRgb'], function (constants, hsvToRgb) {
+        
+        return function (n) {
+            var hue = n * constants.phi % 1;
+            return hsvToRgb(hue, 0.5, 0.95);
+        };
+        
+    }
+);
+</pre>
+
+<pre>
+define('constants', [], function () {
+
+    return {
+        phi: (1 + Math.sqrt(5)) / 2,
+        e: 2.71828183,
+        pi: 3.14159265
+    };
+
+})
+    
+</pre>
+
+
+<pre>
+define('hsvToRgb', [], function () {
+
+    /* (c) 2008 Michael Jackson */
+    return function (h, s, v) {
+    
+        var r, g, b;
+        var i = Math.floor(h * 6);
+        var f = h * 6 - i;
+        var p = v * (1 - s);
+        var q = v * (1 - f * s);
+        var t = v * (1 - (1 - f) * s);
+
+        switch(i % 6){
+            case 0: r = v, g = t, b = p; break;
+            case 1: r = q, g = v, b = p; break;
+            case 2: r = p, g = v, b = t; break;
+            case 3: r = p, g = q, b = v; break;
+            case 4: r = t, g = p, b = v; break;
+            case 5: r = v, g = p, b = q; break;
+        }
+
+        return [r * 255, g * 255, b * 255];
+    }
+
+});    
+    
+</pre>
+
+<ul>
+    <li><a target="_blank" href="http://mjijackson.com/2008/02/rgb-to-hsl-and-rgb-to-hsv-color-model-conversion-algorithms-in-javascript" title="mjijackson &raquo; RGB to HSL and RGB to HSV Color Model Conversion Algorithms in JavaScript">http://mjijackson.com/2008/02/rgb-to-hsl-and-rgb-to-hsv-color-model-conversion-algorithms-in-javascript
+</a></li>
+    <li><a target="_blank" href="http://stackoverflow.com/a/1168328/437" title="My Answer to Algorithm For Generating Unique Colors - Stack Overflow">Stack Overflow: Algorithm for Generating Unique Colors</a></li>
+</ul>
+</p>
+</section>
+
+
+<section class="slide" id="optional-1">
+<h2>Optional Arguments are Optional</h2>
+
+<pre>
+define('myModule', ['dependencyA', 'dependencyB'], function (a, b) {
+    /* do stuff */
+    return theModule;
+});
+    </pre>
+</section>
+
+
+<section class="slide" id="optional-2">
+    <h2>Name is Optional</h2>
+
+    <pre>
+define(['dependencyA', 'dependencyB'], function (a, b) {
+    /* do stuff */
+    return theModule;
+});
+    </pre>
+</section>
+
+
+<section class="slide" id="optional-3">
+    <h2>Dependencies Are Optional</h2>
+
+    <pre>
+define([], function () {
+    /* do stuff */
+    return theModule;
+});
+    </pre>
+</section>
+
+<section class="slide" id="optional-4">
+    <h2>Dependencies Are Optional</h2>
+
+    <pre>
+define(function () {
+    /* do stuff */
+    return theModule;
+});
+    </pre>
+</section>
+
+<section class="slide" id="optional-4">
+    <h2>Return Is Optional</h2>
+
+    <pre>
+define(function () {
+    /* do stuff */
+    
+});
+    </pre>
+</section>
+
+<section class="slide" id="optional-4">
+    <h2>Shortcut for Modules that are Objects</h2>
+
+<pre>
+define({
+    splines: [12, 45, 19],
+    reticulate: function () { ... }
+});
+</pre>
+</section>
+
+
+
+<section class="slide" id="define-signature">
+    <h2>Signature</h2>
+
+    <pre>define(name?, dependencies?, definitionFunction)</pre>
+
+</section>
+
+
+<section class="slide" id="example-1">
+
+<h2>Example: compoundInterest.js</h2>
+<pre>
+define(function () {
+
+    /**
+     * Basic compound interest
+     * @author Miller Medeiros
+     * @version 0.1.0 (2011/12/30)
+     */
+    function compoundInterest(presentValue, interestRate, nPeriods) {
+        return presentValue * Math.pow(1 + interestRate, nPeriods);
+    }
+
+    return compoundInterest;
+
+});
+</pre>
+
+</section>
+
+<section class="slide" id="example-randInt">
+    
+<h2>Example: randInt.js</h2>
+
+<pre>
+define(['../number/MIN_INT', '../number/MAX_INT', '../number/toInt', './rand'], function(MIN_INT, MAX_INT, toInt, rand){
+
+    /**
+     * Gets random integer inside range or snap to min/max values.
+     * @version 0.5.0 (2011/11/17)
+     * @author Miller Medeiros / Fabio Caccamo
+     */
+    function randInt(min, max){
+        min = min == null? MIN_INT : toInt(min);
+        max = max == null? MAX_INT : toInt(max);
+        // can't be max + 0.5 otherwise it will round up if `rand`
+        // returns `max` causing it to overflow range.
+        // -0.5 and + 0.49 are required to avoid bias caused by rounding
+        return Math.round( rand(min - 0.5, max + 0.499999999999) );
+    }
+
+    return randInt;
+});
+</pre>
+</section>
+
+<section class="slide" id="example-MAX_INT">
+    
+<h2>Example: MAX_INT.js</h2>
+
+<pre>
+/**
+ * @constant Maximum 32-bit signed integer value. (2^31 - 1)
+ * @version 0.1.0 (2011/10/21)
+ * @author Miller Medeiros
+ */
+define(2147483647);
+</pre>
+</section>
+
+<section class="slide" id="loaders">
+    
+<h2>Loading with RequireJS</h2>
+    
+<pre class="slide">
+    require('./my-app/main-module');
+</pre>
+
+<pre class="slide">
+    require({ 
+        urlArgs: "bust=" +  (new Date()).getTime(), 
+        baseUrl: '/path/to/my/app',
+        ...
+    },
+    'main-module');
+</pre>
+
+<pre class="slide">
+    &lt;script 
+        type="text/javascript" 
+        src="scripts/require.js"
+        <strong>data-main="main-module-name"</strong>
+    &gt;&lt;/script&gt;
+</pre>
+
+
+<pre class="slide">
+    &lt;script type="text/javascript"&gt;
+        require = {
+            urlArgs: "bust=" +  (new Date()).getTime(), 
+            baseUrl: '/path/to/my/app',
+            ...
+        }
+    &lt;/script&gt;
+
+    &lt;script 
+        type="text/javascript" 
+        src="scripts/require.js"
+        data-main="main-module-name"
+    &gt;&lt;/script&gt;
+</pre>
+
+
+</section>
+
+
+
+<section class="slide" id="r-js">
+    
+<h2>Concatenated builds with r.js</h2>
+    
+<pre class="slide">
+$ npm install require.js
+</pre>
+
+<pre class="slide">
+$ node /path/to/r.js /path/to/main.js    
+</pre>
+
+<pre class="slide">
+$ node /path/to/r.js -o <a href="https://github.com/jrburke/r.js/blob/master/build/example.build.js" target="_blank">build.js</a>    
+</pre>
+
+</section>
+
+
+<section class="slide" id="almond">
+    
+    <h2>Almond</h2>
+    
+    <ul>
+        <li>loads concatenated modules</li>
+        <li>use it in production</li>
+        <li>857 bytes (minified &amp; gzipped)</li>
+    </ul>
+
+<pre class="slide">
+$ node r.js -o baseUrl=. name=path/to/almond.js include=main out=main-built.js wrap=true    
+</pre>    
+
+<pre class="slide">
+function () {
+    
+    // Almond
+    var define = function (...) { ... };
+    
+    define('main', ['dep1', 'dep2'], function(dep1, dep2) { ... };
+    define('dep1', function() { ... };
+    define('dep2', ['dep2a'], function(dep2a) { ... };
+    define('dep2a', function() { ... };
+    
+}(); // Look ma, no globals! 
+</pre>    
+
+</section>
+
+
+<section class="slide" id="plugins">
+<h2>Plugins!</h2>
+
+<pre>
+define(['lib/mustache', '<strong>text!</strong>path/to/template.html', '<strong>json!</strong>some/data.json'], 
+    function (mustache, view, data) {
+        console.log(mustache.render(data, view)); 
+    }
+);
+    
+</pre>
+
+
+<pre class="slide">
+define(['<strong>order!</strong>love', '<strong>order!</strong>marriage', '<strong>order!</strong>baby/carriage'], 
+    function (okcupid, bridesmaids, maclaren) {
+        ...
+    }
+);
+    
+</pre>
+   
+   
+<div class="slide">
+<h3>A plugin is just a module</h3>    
+<pre>
+define(['<strong>path/to/a/plugin!</strong>path/to/a/module', '<strong>domReady!</strong>'], 
+    function (module) {
+        ...
+    }
+);
+</pre>    
+</div>    
+    
+</section>
+
+
+<section class="slide" id="node">
+<h2>Node</h2>
+    
+</section>
+
+<section class="slide" id="libraries">
+<h2>Who's Using AMD?</h2>
+    
+
+    
+<ul>
+    <li><a href="http://dojotoolkit.org/features/1.6/async-modules" title="Asynchronous Modules Come to Dojo 1.6 - The Dojo Toolkit" target="_blank">Dojo 1.6</a></li>
+    <li><a href="http://blog.jquery.com/2011/11/03/jquery-1-7-released/" title="jQuery 1.7 Released" target="_blank">jQuery 1.7</a></li>
+    <li><a href="http://groups.google.com/group/requirejs/browse_thread/thread/68a039882a6ede42" target="_blank">MooTools</a></li>
+    <li>Miller Medeiros's <a href="https://github.com/millermedeiros/amd-utils" target="_blank">amd-utils</a> on Github</li>
+</ul>
+
+<ul>
+    <li><a href="http://getfirebug.com/wiki/index.php/Firebug_1.8_API_Changes" title="Firebug Modules - FirebugWiki" target="_blank">Firebug 1.8</a></li>
+    <li><a href="http://www.bbc.co.uk/iplayer/radio" title="BBC iPlayer - iPlayer Radio Home">BBC iPlayer</a></li>
+    <li><a href="http://disney.go.com/create/" title="Create | Add popular Characters to online drawings | Disney">Disney Create</a></li>
+    <li>Some domain registrar that supported SOPA</li>
+</ul>
+</section>
+
+
+
+
+
+<section class="slide">
+    <h2>.Next</h2>
+    
+    <h3>Me</h3>
+    <ul>
+        <li><a href="http://patrickmcelhaney.com">PatrickMcElhaney.com</a></li>
+        <li><a href="http://twitter.com/patrick_mc" target="_blank">@patrick_mc</a></li>
+        <li><a href="http://github.com/pmcelhaney">http://github.com/pmcelhaney</a></li>
+        <li><a href="http://ux.stackexchange.com/users/61/patrick-mcelhaney" title="UX Stack Exchange: Patrick McElhaney">http://ux.stackexchange.com/</a></li>
+        <li><a href="http://www.ally.com">Ally</a></li>
+    </ul>
+    
+    <h3>AMD</h3>
+    <ul>
+        <!-- I should put avatars here -->
+        <li><a href="http://requirejs.org/docs/whyamd.html" title="Why AMD?" target="_blank">http://requirejs.org/docs/whyamd.html</a></li>
+        <li>James Burke - <a href="http://twitter.com/jrburke" target="_blank">@jrburke</a> (RequireJS, r.js, Almond)</li> 
+        <li>Jonn Hann - <a href="http://twitter.com/unscriptable" target="_blank">@unscriptable</a> (curl.js)</li>
+        <li><a href="https://groups.google.com/group/amd-implement" target="_blank">https://groups.google.com/group/amd-implement</a></li>
+    </ul>
+</section>
+
+
+
+
+
+
+
+<a href="#" class="deck-prev-link" title="Previous">&#8592;</a>
+<a href="#" class="deck-next-link" title="Next">&#8594;</a>
+
+<p class="deck-status">
+    <span class="deck-status-current"></span>
+    /
+    <span class="deck-status-total"></span>
+</p>
+
+<form action="." method="get" class="goto-form">
+    <label for="goto-slide">Go to slide:</label>
+    <input type="number" name="slidenum" id="goto-slide">
+    <input type="submit" value="Go">
+</form>
+
+<a href="." title="Permalink to this slide" class="deck-permalink">#</a>
+
+
+  <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+  <script>window.jQuery || document.write('<script src="deckjs/jquery-1.6.4.min.js"><\/script>')</script>
+
+<!-- Deck Core and extensions -->
+<script src="deckjs/core/deck.core.js"></script>
+<script src="deckjs/extensions/menu/deck.menu.js"></script>
+<script src="deckjs/extensions/goto/deck.goto.js"></script>
+<script src="deckjs/extensions/status/deck.status.js"></script>
+<script src="deckjs/extensions/navigation/deck.navigation.js"></script>
+<script src="deckjs/extensions/hash/deck.hash.js"></script>
+
+<!-- Specific to this page -->
+<script type="text/javascript" charset="utf-8">
+    $(function () {
+        $.deck('.slide');
+    });
+</script>
+
+
+</body>
+</html>
